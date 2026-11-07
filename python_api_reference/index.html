@@ -1,0 +1,1186 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="High-Performance Multiphase & Foam Flow Simulation in Porous Media">
+      
+      
+        <meta name="author" content="Filipe F. de Paula, Thiago Quinelato, Iury Igreja">
+      
+      
+        <link rel="canonical" href="https://fylype.github.io/pyfossil/python_api_reference/">
+      
+      
+        <link rel="prev" href="../installation/">
+      
+      
+        <link rel="next" href="../solvers_and_numerics/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>Python API Reference - pyfossil Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#python-api-reference-pyfossil" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="pyfossil Documentation" class="md-header__button md-logo" aria-label="pyfossil Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pyfossil Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Python API Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/fylype/pyfossil" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    fylype/pyfossil
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../installation/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Installation
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Python API Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../solvers_and_numerics/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Solvers & Numerical Methods
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../tutorials_guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Tutorials & Benchmarks
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../plotter_guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Visualization Guide
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="pyfossil Documentation" class="md-nav__button md-logo" aria-label="pyfossil Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    pyfossil Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/fylype/pyfossil" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    fylype/pyfossil
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python API Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-central-configuration-class-simulationdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏗️ 1. Central Configuration Class: SimulationData
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏗️ 1. Central Configuration Class: SimulationData">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-global-settings-simglobal_settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Global Settings (sim.global_settings)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-orthogonal-geometry-simorthogonal_geometry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Orthogonal Geometry (sim.orthogonal_geometry)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-unstructured-mesh-simunstructured_geometry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Unstructured Mesh (sim.unstructured_geometry)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-fluid-properties-simfluid_properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Fluid Properties (sim.fluid_properties)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-rock-petrophysics-simrock_properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 Rock Petrophysics (sim.rock_properties)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-rock-fluid-interactions-simrock_fluid_interactions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 Rock-Fluid Interactions (sim.rock_fluid_interactions)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-eor-mechanisms-foam-models-simeor_mechanisms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 EOR Mechanisms &amp; Foam Models (sim.eor_mechanisms)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-peaceman-well-system-simwells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.8 Peaceman Well System (sim.wells)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-initial-and-boundary-conditions-siminitial_and_boundary_conditions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.9 Initial and Boundary Conditions (sim.initial_and_boundary_conditions)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#110-numerical-solvers-execution-control-simexecution_control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.10 Numerical Solvers &amp; Execution Control (sim.execution_control)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-executive-engine-fossilsimulator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎮 2. Executive Engine: FossilSimulator
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎮 2. Executive Engine: FossilSimulator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-constructor-and-core-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Constructor and Core Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../solvers_and_numerics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solvers & Numerical Methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials & Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plotter_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visualization Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-central-configuration-class-simulationdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏗️ 1. Central Configuration Class: SimulationData
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏗️ 1. Central Configuration Class: SimulationData">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-global-settings-simglobal_settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Global Settings (sim.global_settings)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-orthogonal-geometry-simorthogonal_geometry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Orthogonal Geometry (sim.orthogonal_geometry)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-unstructured-mesh-simunstructured_geometry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Unstructured Mesh (sim.unstructured_geometry)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-fluid-properties-simfluid_properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Fluid Properties (sim.fluid_properties)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-rock-petrophysics-simrock_properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 Rock Petrophysics (sim.rock_properties)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-rock-fluid-interactions-simrock_fluid_interactions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 Rock-Fluid Interactions (sim.rock_fluid_interactions)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-eor-mechanisms-foam-models-simeor_mechanisms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 EOR Mechanisms &amp; Foam Models (sim.eor_mechanisms)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-peaceman-well-system-simwells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.8 Peaceman Well System (sim.wells)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-initial-and-boundary-conditions-siminitial_and_boundary_conditions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.9 Initial and Boundary Conditions (sim.initial_and_boundary_conditions)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#110-numerical-solvers-execution-control-simexecution_control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.10 Numerical Solvers &amp; Execution Control (sim.execution_control)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-executive-engine-fossilsimulator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎮 2. Executive Engine: FossilSimulator
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎮 2. Executive Engine: FossilSimulator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-constructor-and-core-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Constructor and Core Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="python-api-reference-pyfossil">Python API Reference (<code>pyfossil</code>)</h1>
+<p>This document provides a comprehensive reference for the classes, data structures, enumerations, and methods exposed by the <code>pyfossil</code> module.</p>
+<hr />
+<h2 id="1-central-configuration-class-simulationdata">🏗️ 1. Central Configuration Class: <code>SimulationData</code></h2>
+<p>The <code>pyfossil.SimulationData</code> object is the unified repository defining all physical, geometric, fluid, rock, well, and numerical solver configurations.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pyfossil</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">sim</span> <span class="o">=</span> <span class="n">pyfossil</span><span class="o">.</span><span class="n">SimulationData</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="11-global-settings-simglobal_settings">1.1 Global Settings (<code>sim.global_settings</code>)</h3>
+<ul>
+<li><strong><code>dimension</code> (<code>int</code>):</strong> Spatial dimension of the domain (<code>1</code>, <code>2</code>, or <code>3</code>).</li>
+<li><strong><code>mesh_type</code> (<code>pyfossil.MeshType</code>):</strong></li>
+<li><code>MeshType.ORTHOGONAL_MESH</code>: Structured Cartesian / orthogonal grid.</li>
+<li><code>MeshType.UNSTRUCTURED_MESH</code>: Unstructured mesh imported from Gmsh (<code>.msh</code>).</li>
+</ul>
+<hr />
+<h3 id="12-orthogonal-geometry-simorthogonal_geometry">1.2 Orthogonal Geometry (<code>sim.orthogonal_geometry</code>)</h3>
+<p>Used when <code>mesh_type = MeshType.ORTHOGONAL_MESH</code>.
+- <strong><code>n_x</code>, <code>n_y</code>, <code>n_z</code> (<code>int</code>):</strong> Number of cells in X, Y, and Z directions.
+- <strong><code>x_init</code>, <code>x_final</code> (<code>float</code>):</strong> Beginning and end coordinates along the X-axis [m].
+- <strong><code>y_init</code>, <code>y_final</code> (<code>float</code>):</strong> Beginning and end coordinates along the Y-axis [m].
+- <strong><code>z_init</code>, <code>z_final</code> (<code>float</code>):</strong> Beginning and end coordinates along the Z-axis [m].
+- <strong><code>block_thickness</code> (<code>float</code>):</strong> Extrusion thickness of the reservoir (useful for planar 2D models) [m].</p>
+<hr />
+<h3 id="13-unstructured-mesh-simunstructured_geometry">1.3 Unstructured Mesh (<code>sim.unstructured_geometry</code>)</h3>
+<p>Used when <code>mesh_type = MeshType.UNSTRUCTURED_MESH</code>.
+- <strong><code>mesh_filename</code> (<code>str</code>):</strong> Absolute or relative path to the Gmsh mesh file (<code>.msh</code>, formats 2.2 or 4.1).</p>
+<hr />
+<h3 id="14-fluid-properties-simfluid_properties">1.4 Fluid Properties (<code>sim.fluid_properties</code>)</h3>
+<ul>
+<li><strong><code>water_viscosity</code> (<code>float</code>):</strong> Dynamic water viscosity <span class="arithmatex">\(\mu_w\)</span> [Pa·s].</li>
+<li><strong><code>water_density</code> (<code>float</code>):</strong> Water density <span class="arithmatex">\(\rho_w\)</span> [kg/m³].</li>
+<li><strong><code>gas_viscosity</code> (<code>float</code>):</strong> Dynamic gas viscosity <span class="arithmatex">\(\mu_g\)</span> [Pa·s].</li>
+<li><strong><code>gas_density</code> (<code>float</code>):</strong> Reference gas density <span class="arithmatex">\(\rho_g\)</span> [kg/m³].</li>
+<li><strong><code>gas_compressibility</code> (<code>bool</code>):</strong> Enables compressible gas regime.</li>
+<li><strong><code>gas_state_equation</code> (<code>pyfossil.GasStateEquationModel</code>):</strong></li>
+<li><code>GasStateEquationModel.IDEAL_GAS</code>: Ideal gas law.</li>
+<li><code>GasStateEquationModel.DENSITY_TABLE</code>: Discrete tabular PVT relationship of Pressure vs. Density.</li>
+<li><strong><code>table_density_model.density_table</code> (<code>dict[float, float]</code>):</strong> Dictionary mapping <code>{Pressure [Pa]: Density [kg/m³]}</code>.</li>
+<li><strong><code>gravity</code> (<code>bool</code>):</strong> Enables gravitational acceleration and buoyancy terms.</li>
+<li><strong><code>gravity_direction</code> (<code>list[float]</code>):</strong> Gravitational acceleration vector <span class="arithmatex">\([g_x, g_y, g_z]\)</span> [m/s²].</li>
+</ul>
+<hr />
+<h3 id="15-rock-petrophysics-simrock_properties">1.5 Rock Petrophysics (<code>sim.rock_properties</code>)</h3>
+<ul>
+<li><strong><code>perm_x</code>, <code>perm_y</code>, <code>perm_z</code> (<code>float</code>):</strong> Absolute permeabilities in X, Y, and Z [m²]. <em>(Note: <span class="arithmatex">\(1\text{ mD} \approx 9.86923\times 10^{-16}\text{ m}^2\)</span>)</em>.</li>
+<li><strong><code>porosity</code> (<code>float</code>):</strong> Porosity of the porous medium <span class="arithmatex">\(\phi \in (0, 1)\)</span>.</li>
+<li><strong><code>perm_filename</code> (<code>str</code>):</strong> External data point cloud file for permeability (e.g., SPE 10 Model 2).</li>
+<li><strong><code>por_filename</code> (<code>str</code>):</strong> External data point cloud file for porosity.</li>
+<li><strong><code>use_material_ids</code> (<code>bool</code>):</strong> Enables petrophysical mapping across Gmsh physical region tags.</li>
+<li><code>permeability_x_map</code> (<code>dict[int, float]</code>): Material mapping <code>{Material_ID: Perm_X}</code>.</li>
+<li><code>porosity_map</code> (<code>dict[int, float]</code>): Material mapping <code>{Material_ID: Porosity}</code>.</li>
+<li><strong><code>use_synthetic_field</code> (<code>bool</code>):</strong> Generates a spatially correlated log-normal synthetic field using the built-in stochastic generator.</li>
+<li><code>synthetic_rock_field.seed</code>: Integer pseudo-random seed.</li>
+<li><code>synthetic_rock_field.permeability_avg</code>: Mean permeability [m²].</li>
+<li><code>synthetic_rock_field.porosity_avg</code>: Mean porosity.</li>
+<li><code>synthetic_rock_field.heterogeneity</code>: Log-normal variance parameter.</li>
+<li><strong><code>upscaling</code>:</strong> Directional petrophysical upscaling manager:</li>
+<li><code>method_x</code>, <code>method_y</code>, <code>method_z</code> (<code>pyfossil.UpscalingMethod</code>): <code>ARITHMETIC</code>, <code>HARMONIC</code>, <code>GEOMETRIC</code>, <code>POWER_LAW</code>.</li>
+<li><code>power_law_exponent_x</code>, <code>power_law_exponent_y</code>: Power-law averaging exponent (e.g., 0.33).</li>
+</ul>
+<hr />
+<h3 id="16-rock-fluid-interactions-simrock_fluid_interactions">1.6 Rock-Fluid Interactions (<code>sim.rock_fluid_interactions</code>)</h3>
+<ul>
+<li><strong><code>swc</code> (<code>float</code>):</strong> Connate / irreducible water saturation <span class="arithmatex">\(S_{wc}\)</span>.</li>
+<li><strong><code>sgr</code> (<code>float</code>):</strong> Residual gas saturation <span class="arithmatex">\(S_{gr}\)</span>.</li>
+<li><strong><code>sigma_wg</code> (<code>float</code>):</strong> Water-gas interfacial tension <span class="arithmatex">\(\sigma_{wg}\)</span> [N/m].</li>
+<li><strong><code>rel_perm_model</code> (<code>pyfossil.RelativePermeabilityModel</code>):</strong></li>
+<li><code>COREY_BROOKS_KR</code>: Standard Corey-Brooks model.</li>
+<li><code>KOVSCEK_KR</code>: Cubic Kovscek curves.</li>
+<li><code>ASHOORI_KR</code>: Quadratic Ashoori curves.</li>
+<li><code>CUSTOM_KR</code>: Custom saturation exponents <span class="arithmatex">\(N_w\)</span> and <span class="arithmatex">\(N_g\)</span> (<code>custom_rel_perm.nw</code>, <code>ng</code>).</li>
+<li><strong><code>cap_pressure_model</code> (<code>pyfossil.CapillaryPressureModel</code>):</strong></li>
+<li><code>NONE</code>: Neglect capillary pressure.</li>
+<li><code>LEVERETT_J</code>: Leverett J-function scaled by local permeability and porosity.</li>
+<li><code>KOVSCEK_CP</code>, <code>ASHOORI_CP</code>: Foam-specific capillary formulations.</li>
+</ul>
+<hr />
+<h3 id="17-eor-mechanisms-foam-models-simeor_mechanisms">1.7 EOR Mechanisms &amp; Foam Models (<code>sim.eor_mechanisms</code>)</h3>
+<ul>
+<li><strong><code>foam_model</code> (<code>pyfossil.FoamModel</code>):</strong> <code>NONE</code>, <code>KOVSCEK</code>, <code>ASHOORI</code>.</li>
+<li><strong>Ashoori Model Parameters (<code>sim.eor_mechanisms.ashoori_model</code>):</strong></li>
+<li><code>A</code>: Lamella division bubble generation parameter.</li>
+<li><code>sw_critical</code>: Critical water saturation for capillary transition.</li>
+<li><code>max_mob_red</code>: Maximum gas mobility reduction factor (<span class="arithmatex">\(MRF\)</span>).</li>
+<li><code>K_c</code>: Lamella destruction rate constant [s⁻¹].</li>
+<li><strong>Kovscek Model Parameters (<code>sim.eor_mechanisms.kovscek_model</code>):</strong></li>
+<li><code>k01</code>: Lamella generation rate coefficient.</li>
+<li><code>k0m1</code>: Lamella coalescence rate coefficient.</li>
+<li><code>refSurf</code>: Reference critical surfactant concentration [wt%].</li>
+<li><code>alpha</code>: Bretherton shear-thinning exponent.</li>
+<li><code>pcStarMax</code>: Limiting capillary pressure for lamella rupture [Pa].</li>
+</ul>
+<hr />
+<h3 id="18-peaceman-well-system-simwells">1.8 Peaceman Well System (<code>sim.wells</code>)</h3>
+<p>Dictionary of wells indexed by identifier string (<code>sim.wells["WellName"]</code>):
+- <strong><code>well_type</code> (<code>pyfossil.WellType</code>):</strong> <code>INJECTOR</code> or <code>PRODUCER</code>.
+- <strong><code>well_control</code> (<code>pyfossil.WellControl</code>):</strong>
+  - <code>WellControl.FLOW_RATE</code>: Target volumetric flow rate [m³/s].
+  - <code>WellControl.BHP</code>: Bottom-Hole Pressure constraint [Pa].
+- <strong><code>well_value</code> (<code>float</code> or <code>dict</code>):</strong> Operational constraint value (supports piecewise schedules <code>{time: value}</code>).
+- <strong><code>well_radius</code> (<code>float</code>):</strong> Wellbore radius <span class="arithmatex">\(r_w\)</span> [m].
+- <strong><code>skin_factor</code> (<code>float</code>):</strong> Dimensionless well skin factor.
+- <strong><code>include_hydrostatic_head</code> (<code>bool</code>):</strong> Accounts for hydrostatic fluid head variation along well perforations.
+- <strong><code>trajectory_coords</code> (<code>list[float]</code>):</strong> 3D well trajectory coordinates <code>[x1, y1, z1, x2, y2, z2]</code> from heel to toe.</p>
+<hr />
+<h3 id="19-initial-and-boundary-conditions-siminitial_and_boundary_conditions">1.9 Initial and Boundary Conditions (<code>sim.initial_and_boundary_conditions</code>)</h3>
+<ul>
+<li><strong><code>initial_state</code>:</strong></li>
+<li><code>pressure_init.constant_value</code>: Initial reservoir pressure [Pa].</li>
+<li><code>initialization[pyfossil.Variable.SW].constant_value</code>: Initial water saturation <span class="arithmatex">\(S_w \in [0, 1]\)</span>.</li>
+<li><code>initialization[pyfossil.Variable.CS].constant_value</code>: Initial surfactant concentration <span class="arithmatex">\(C_s\)</span> [wt%].</li>
+<li><strong>Cartesian Mesh Boundaries:</strong> Predefined faces <code>"Left"</code>, <code>"Right"</code>, <code>"Top"</code>, <code>"Bottom"</code>, <code>"Front"</code>, <code>"Back"</code>.</li>
+<li><strong>Unstructured Mesh Boundaries:</strong> Defined dynamically via <code>setup_dynamic_boundaries(["Name1", "Name2", ...])</code>.</li>
+<li><strong>Boundary Properties:</strong></li>
+<li><code>darcy_boundary_type</code>: <code>DIRICHLET</code> (prescribed pressure) or <code>NEUMANN</code> (prescribed Darcy flux [m/s]).</li>
+<li><code>darcy_boundary_value</code>: Scalar value or time schedule <code>{t0: v0, t1: v1}</code>.</li>
+<li><code>trans_boundary_type</code>: <code>DIRICHLET</code>, <code>INFLOW_DIRICHLET</code>, <code>INFLOW_NEUMANN_FW</code>, <code>OUTFLOW</code>, <code>NO_FLOW</code>.</li>
+<li><code>trans_boundary_values[pyfossil.Variable.*]</code>: Prescribed injected volume fraction or concentration.</li>
+</ul>
+<hr />
+<h3 id="110-numerical-solvers-execution-control-simexecution_control">1.10 Numerical Solvers &amp; Execution Control (<code>sim.execution_control</code>)</h3>
+<ul>
+<li><strong><code>variables</code> (<code>set[pyfossil.Variable]</code>):</strong> Set of active conservation equations:</li>
+<li><code>Variable.SW</code>: Water saturation.</li>
+<li><code>Variable.ND</code>: Foam bubble texture density.</li>
+<li><code>Variable.CS</code>: Surfactant concentration.</li>
+<li><strong><code>darcy_linear_solver</code> (<code>pyfossil.DarcyLinearSolver</code>):</strong></li>
+<li><code>CG</code>: Conjugate Gradient (ideal for symmetric positive-definite condensed systems).</li>
+<li><code>MINRES</code>: Minimal Residual (optimal for pure-Neumann problems with nullspace closure).</li>
+<li><code>GMRES</code>, <code>BiCGSTAB</code>: General Krylov solvers for nonsymmetric matrices.</li>
+<li><code>UMFPACK</code>: Direct sparse LU factorization (exact and robust for 1D/2D).</li>
+<li><strong><code>darcy_preconditioner</code> (<code>pyfossil.DarcyPreconditioner</code>):</strong></li>
+<li><code>BOOMER_AMG</code>: HYPRE BoomerAMG algebraic multigrid (peak performance on large 3D meshes).</li>
+<li><code>GAMG</code>: PETSc native Geometric-Algebraic Multigrid.</li>
+<li><code>ICC</code>: Incomplete Cholesky Factorization.</li>
+<li><code>PARASAILS</code>: Parallel Sparse Approximate Inverse.</li>
+<li><code>NONE</code>: Unpreconditioned iterative solver.</li>
+<li><strong><code>transport_linear_solver</code> (<code>pyfossil.TransportLinearSolver</code>):</strong></li>
+<li><code>GMRES</code>, <code>BICGSTAB</code>, <code>TFQMR</code>: Native SUNDIALS Krylov solvers tightly coupled to JFNK.</li>
+<li><code>GMRES_PETSC</code>, <code>BCGSL_PETSC</code>, <code>BICGSTAB_PETSC</code>: PETSc KSP solvers coupled to JFNK.</li>
+<li><strong><code>transport_preconditioner</code> (<code>pyfossil.TransportPreconditioner</code>):</strong></li>
+<li><code>BLOCK_ILU</code>: Block-Jacobi incomplete LU per cell (default, excellent efficiency).</li>
+<li><code>GLOBAL_ILU</code>: Global coupled ILU across the full mesh.</li>
+<li><code>BOOMER_AMG</code>: Algebraic multigrid for transport systems.</li>
+<li><code>NONE</code>: Pure matrix-free JFNK without preconditioning.</li>
+<li><strong><code>darcy_time_step_strategy</code> (<code>pyfossil.DarcyTimeStepStrategy</code>):</strong></li>
+<li><code>NONE</code>: Fixed constant Darcy macro time step.</li>
+<li><code>SW_VARIATION</code>: Adaptive time stepping governed by maximum saturation variation <span class="arithmatex">\(\Delta S_w\)</span>.</li>
+<li><code>PAZ_VELOCITY</code>: Adaptive time stepping based on velocity <span class="arithmatex">\(L_2\)</span> norm variation (Paz et al., 2021).</li>
+<li><strong><code>num_method</code> (<code>pyfossil.NumericalMethod</code>):</strong></li>
+<li><code>KNP</code>: Central-Upwind scheme of Kurganov, Noelle &amp; Petrova (2001).</li>
+<li><code>KPP</code>: Central-Upwind scheme of Kurganov, Petrova &amp; Popova (2007) for non-convex fractional flows.</li>
+<li><strong><code>abstol</code>, <code>reltol</code> (<code>float</code>):</strong> Absolute and relative tolerances for CVODE integration.</li>
+<li><strong><code>num_threads</code> (<code>int</code>):</strong> Number of OpenMP parallel execution threads.</li>
+</ul>
+<hr />
+<h2 id="2-executive-engine-fossilsimulator">🎮 2. Executive Engine: <code>FossilSimulator</code></h2>
+<p>Manages grid assembly, physical field mapping, the coupled Darcy-transport time-stepping loop, and output generation.</p>
+<h3 id="21-constructor-and-core-methods">2.1 Constructor and Core Methods</h3>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">simulator</span> <span class="o">=</span> <span class="n">pyfossil</span><span class="o">.</span><span class="n">FossilSimulator</span><span class="p">(</span><span class="n">sim_data</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">"./output"</span><span class="p">)</span>
+</code></pre></div>
+- <strong><code>run()</code>:</strong> Executes the complete simulation from initial state to <code>final_time</code>.
+- <strong><code>set_step_callback(callback_fn)</code>:</strong> Registers a Python callback invoked after each macro time step.
+  - Callback signature: <code>callback(t_physical: float, sim, sim_data) -&gt; bool</code>
+  - Returning <code>True</code> continues simulation; returning <code>False</code> triggers graceful early termination.
+- <strong><code>get_current_well_bhp(well_name: str) -&gt; float</code>:</strong> Returns the current Bottom-Hole Pressure of the specified well in Pascals.
+- <strong><code>get_current_well_rate(well_name: str) -&gt; float</code>:</strong> Returns the current volumetric flow rate of the specified well in m³/s.
+- <strong><code>set_well_bhp(well_name: str, bhp_pa: float)</code>:</strong> Dynamically modifies the target BHP of a well during execution.
+- <strong><code>set_well_rate(well_name: str, rate_m3_s: float)</code>:</strong> Dynamically modifies the target flow rate of a well during execution.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

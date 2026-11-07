@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://fylype.github.io/pyfossil/</loc>
+         <lastmod>2026-11-07</lastmod>
+    </url>
+    <url>
+         <loc>https://fylype.github.io/pyfossil/installation/</loc>
+         <lastmod>2026-11-07</lastmod>
+    </url>
+    <url>
+         <loc>https://fylype.github.io/pyfossil/plotter_guide/</loc>
+         <lastmod>2026-11-07</lastmod>
+    </url>
+    <url>
+         <loc>https://fylype.github.io/pyfossil/python_api_reference/</loc>
+         <lastmod>2026-11-07</lastmod>
+    </url>
+    <url>
+         <loc>https://fylype.github.io/pyfossil/solvers_and_numerics/</loc>
+         <lastmod>2026-11-07</lastmod>
+    </url>
+    <url>
+         <loc>https://fylype.github.io/pyfossil/tutorials_guide/</loc>
+         <lastmod>2026-11-07</lastmod>
+    </url>
+</urlset>
