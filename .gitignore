@@ -1,0 +1,30 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Simulation Outputs
+output*/
+*.vtu
+*.vtk
+*.log
+*.pvd
+
+# Binary Distributions (wheels should be published via GitHub Releases)
+*.whl
+dist/
+build/
+*.egg-info/
+
+# Environments
+.venv/
+env/
+venv/
+ENV/
+
+# IDE & Editor Configurations
+.vscode/
+.idea/
+*.swp
+*~
+site/
