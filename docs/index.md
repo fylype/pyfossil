@@ -71,7 +71,7 @@ simulator.run()
 If you use `pyfossil` or `FOSSIL` in your scientific work, please cite the underlying peer-reviewed papers:
 
 ```bibtex
-@article{dePaula2024_AWR,
+@article{dePaula2024,
   author = {Filipe F. {de Paula} and Iury Igreja and Thiago O. Quinelato and Grigori Chapiro},
   title = {Numerical simulation of foam displacement impacted by kinetic and equilibrium surfactant adsorption},
   journal = {Advances in Water Resources},
@@ -81,7 +81,7 @@ If you use `pyfossil` or `FOSSIL` in your scientific work, please cite the under
   doi = {10.1016/j.advwatres.2024.104690}
 }
 
-@article{dePaula2026_GSE,
+@article{dePaula2026,
   author = {Filipe F. {de Paula} and Iury Igreja and Grigori Chapiro},
   title = {Gas-dependent mobility control in foam-assisted injection: Comparative analysis of {CO}$_2$ and {N}$_2$ in heterogeneous reservoirs},
   journal = {Gas Science and Engineering},
@@ -91,13 +91,13 @@ If you use `pyfossil` or `FOSSIL` in your scientific work, please cite the under
   doi = {10.1016/j.jgsce.2026.205968}
 }
 
-@article{cedro2025_AWR,
-  author = {Jhuan B. Cedro and Filipe F. {de Paula} and Grigori Chapiro},
-  title = {On the modeling of the foam dynamics in heterogeneous porous media},
+@article{dePaula2023,
+  author = {Filipe F. {de Paula} and Iury Igreja and Thiago O. Quinelato and Grigori Chapiro},
+  title = {A numerical investigation into the influence of the surfactant injection technique on the foam flow in heterogeneous porous media},
   journal = {Advances in Water Resources},
-  volume = {196},
-  pages = {104882},
-  year = {2025},
-  doi = {10.1016/j.advwatres.2024.104882}
+  volume = {171},
+  pages = {104358},
+  year = {2023},
+  doi = {10.1016/j.advwatres.2022.104358}
 }
 ```
