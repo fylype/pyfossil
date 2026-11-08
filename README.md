@@ -9,7 +9,7 @@
 [![Platform](https://img.shields.io/badge/Platform-Linux%20x86__64-orange.svg)](https://github.com/fylype/pyfossil)
 [![Version](https://img.shields.io/badge/Release-v1.0.0-green.svg)](https://github.com/fylype/pyfossil/releases)
 [![Documentation](https://img.shields.io/badge/Docs-GitHub%20Pages-blue.svg)](https://fylype.github.io/pyfossil/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-Non--Commercial%20Academic-red.svg)](LICENSE)
 
 </div>
 
@@ -223,6 +223,19 @@ If you use `pyfossil` or `FOSSIL` in your scientific work or publications, pleas
   doi = {10.1016/j.advwatres.2022.104358}
 }
 ```
+
+---
+
+## 📄 License
+
+`pyfossil` is distributed under the **FOSSIL Non-Commercial Academic & Research License**.
+
+- **Non-Commercial Academic Use:** Free for non-profit education, university degree theses, and academic scientific research.
+- **Mandatory Attribution & Credit:** Any scientific publication, dissertation, conference presentation, or technical report using `pyfossil` must cite the author's peer-reviewed papers (`dePaula2024`, `dePaula2026`, `dePaula2023`) and acknowledge `pyfossil`.
+- **Commercial Use Strictly Prohibited:** Direct or indirect use by commercial corporations, consulting firms, oil & gas operators, or paid engineering studies requires a separate written commercial license.
+- **Proprietary & Closed-Source:** Reverse engineering, decompilation, and unauthorized commercial redistribution are strictly prohibited.
+
+For complete legal terms, see the [LICENSE](LICENSE) file.
 
 ---
 

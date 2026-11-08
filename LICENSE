@@ -1,0 +1,96 @@
+FOSSIL & pyfossil Non-Commercial Academic & Research License
+Copyright (c) 2024-2026 Filipe F. de Paula. All rights reserved.
+
+================================================================================
+TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+================================================================================
+
+1. PREAMBLE & OWNERSHIP
+'pyfossil' and the underlying 'FOSSIL' (FOam diSplacement SImuLator) software suite, 
+including its source code, compiled binaries, algorithms, data structures, and documentation, 
+are the exclusive proprietary property of Filipe F. de Paula ("the Author"). 
+This software is NOT public domain and is NOT licensed under an open-source license. 
+Access to and use of the software is governed strictly by the terms of this License.
+
+2. GRANT OF NON-COMMERCIAL ACADEMIC LICENSE
+Subject to strict compliance with all provisions of this License, the Author hereby grants 
+you a revocable, non-exclusive, non-transferable, non-sublicensable, royalty-free license 
+to install, execute, and use the precompiled binary packages and accompanying documentation 
+solely for:
+  a. Non-profit academic education, classroom teaching, and student laboratory training;
+  b. Non-commercial scientific and scholarly research conducted at accredited non-profit 
+     academic or public research institutions;
+  c. Completion of university degree requirements (undergraduate capstone projects, master's 
+     theses, doctoral dissertations).
+
+3. MANDATORY ATTRIBUTION AND ACADEMIC CITATION (CREDIT REQUIREMENT)
+Whenever 'pyfossil' or 'FOSSIL' is utilized, directly or indirectly, to generate data, 
+numerical results, tables, graphs, figures, or simulation models presented in any public 
+or academic work, you MUST provide explicit credit to the Author as follows:
+
+  a. Scientific Citation: You must cite the primary peer-reviewed publications describing 
+     the underlying numerical formulations and mechanistic models:
+
+     - de Paula, F. F., Igreja, I., Quinelato, T. O., & Chapiro, G. (2024). 
+       Numerical simulation of foam displacement impacted by kinetic and equilibrium 
+       surfactant adsorption. Advances in Water Resources, 188, 104690. 
+       https://doi.org/10.1016/j.advwatres.2024.104690
+
+     - de Paula, F. F., Igreja, I., & Chapiro, G. (2026). 
+       Gas-dependent mobility control in foam-assisted injection: Comparative analysis 
+       of CO2 and N2 in heterogeneous reservoirs. Gas Science and Engineering, 154, 205968. 
+       https://doi.org/10.1016/j.jgsce.2026.205968
+
+     - de Paula, F. F., Igreja, I., Quinelato, T. O., & Chapiro, G. (2023). 
+       A numerical investigation into the influence of the surfactant injection technique 
+       on the foam flow in heterogeneous porous media. Advances in Water Resources, 171, 104358. 
+       https://doi.org/10.1016/j.advwatres.2022.104358
+
+  b. Acknowledgment Statement: In all published papers, preprints, conference proceedings, 
+     theses, or presentations, an acknowledgment statement must be included:
+     "Numerical simulations were conducted using pyfossil (FOam diSplacement SImuLator), 
+     developed by Filipe F. de Paula (https://fylype.github.io/pyfossil/)."
+
+  c. Preservation of Notices: You must retain all copyright notices, author credits, and 
+     license terms intact in all distributed scripts, documentation, and derived workflows.
+
+4. STRICT PROHIBITION OF COMMERCIAL USE
+The software may NOT be used for any commercial, industrial, or revenue-generating purposes. 
+Prohibited commercial uses include, without limitation:
+  a. Use within, on behalf of, or funded by for-profit corporations, oil and gas operating 
+     companies, service contractors, or commercial engineering consultancies.
+  b. Paid consulting, fee-for-service numerical modeling, proprietary client reservoir 
+     studies, or commercial technical reports.
+  c. Sublicensing, leasing, renting, reselling, or commercial redistribution of the software 
+     or any derived service.
+  d. Incorporating the software or its compiled binaries into any proprietary or commercial 
+     software product, cloud platform, or Software-as-a-Service (SaaS) offering.
+
+Commercial entities, operators, and consulting organizations wishing to license, evaluate, 
+or deploy FOSSIL / pyfossil must obtain an explicit written commercial license from the Author.
+
+5. PROPRIETARY RESTRICTIONS & PROHIBITION OF REVERSE ENGINEERING
+The software is licensed, not sold. You shall not:
+  a. Reverse engineer, decompile, disassemble, decrypt, unpack, or attempt to derive the 
+     source code or mathematical algorithms from the compiled binary modules (*.so, *.pyd);
+  b. Modify, adapt, translate, or create derivative works of the compiled binary extensions;
+  c. Remove, alter, or obscure any proprietary copyright notices, author identifiers, 
+     or watermarks embedded in the software or its documentation.
+
+6. TERMINATION
+This License terminates automatically and immediately without notice if you fail to comply 
+with any of its terms and conditions, in particular the non-commercial restriction or 
+the mandatory attribution requirement. Upon termination, you must immediately cease all 
+use of the software and permanently destroy all copies in your possession.
+
+7. DISCLAIMER OF WARRANTIES
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR 
+IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT OF THIRD-PARTY RIGHTS. THE ENTIRE 
+RISK AS TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE IS WITH YOU.
+
+8. LIMITATION OF LIABILITY
+IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, 
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, LOSS OF USE, DATA, 
+PROFITS, OR BUSINESS INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
+EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.

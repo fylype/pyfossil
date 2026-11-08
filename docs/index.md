@@ -101,3 +101,14 @@ If you use `pyfossil` or `FOSSIL` in your scientific work, please cite the under
   doi = {10.1016/j.advwatres.2022.104358}
 }
 ```
+
+---
+
+## 📄 License & Terms of Use
+
+`pyfossil` is distributed under the **FOSSIL Non-Commercial Academic & Research License**:
+
+- **Academic & Educational Use:** Free for non-profit teaching, degree theses, and academic research.
+- **Mandatory Attribution & Credit:** Any scientific publication, dissertation, presentation, or technical report using `pyfossil` must cite the author's peer-reviewed papers (`dePaula2024`, `dePaula2026`, `dePaula2023`) and acknowledge `pyfossil`.
+- **Commercial Use Prohibited:** Commercial entities, paid consulting, and revenue-generating applications require an explicit separate commercial agreement with the author.
+- **Proprietary & Closed-Source:** Decompilation, reverse engineering, and unauthorized redistribution are strictly prohibited.
