@@ -190,13 +190,37 @@ plotter.plot_spatial_1d(
 
 ## 📖 Citation
 
-If you use `pyfossil` or `FOSSIL` in your scientific work or publications, please cite:
+If you use `pyfossil` or `FOSSIL` in your scientific work or publications, please cite the underlying peer-reviewed papers:
 
 ```bibtex
-@article{dePaula2023,
-  title = {Numerical simulation of foam displacement in porous media using high-resolution hybridized mixed finite elements and central-upwind schemes},
-  author = {de Paula, Filipe F. and Quinelato, Thiago and Igreja, Iury},
-  year = {2023}
+@article{dePaula2024_AWR,
+  author = {Filipe F. {de Paula} and Iury Igreja and Thiago O. Quinelato and Grigori Chapiro},
+  title = {Numerical simulation of foam displacement impacted by kinetic and equilibrium surfactant adsorption},
+  journal = {Advances in Water Resources},
+  volume = {188},
+  pages = {104690},
+  year = {2024},
+  doi = {10.1016/j.advwatres.2024.104690}
+}
+
+@article{dePaula2026_GSE,
+  author = {Filipe F. {de Paula} and Iury Igreja and Grigori Chapiro},
+  title = {Gas-dependent mobility control in foam-assisted injection: Comparative analysis of {CO}$_2$ and {N}$_2$ in heterogeneous reservoirs},
+  journal = {Gas Science and Engineering},
+  volume = {154},
+  pages = {205968},
+  year = {2026},
+  doi = {10.1016/j.jgsce.2026.205968}
+}
+
+@article{cedro2025_AWR,
+  author = {Jhuan B. Cedro and Filipe F. {de Paula} and Grigori Chapiro},
+  title = {On the modeling of the foam dynamics in heterogeneous porous media},
+  journal = {Advances in Water Resources},
+  volume = {196},
+  pages = {104882},
+  year = {2025},
+  doi = {10.1016/j.advwatres.2024.104882}
 }
 ```
 
