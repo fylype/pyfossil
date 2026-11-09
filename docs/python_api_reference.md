@@ -38,25 +38,27 @@ Used when `mesh_type = MeshType.UNSTRUCTURED_MESH`.
 ---
 
 ### 1.4 Fluid Properties (`sim.fluid_properties`)
-- **`water_viscosity` (`float`):** Dynamic water viscosity $\mu_w$ [Pa·s].
-- **`water_density` (`float`):** Water density $\rho_w$ [kg/m³].
-- **`gas_viscosity` (`float`):** Dynamic gas viscosity $\mu_g$ [Pa·s].
-- **`gas_density` (`float`):** Reference gas density $\rho_g$ [kg/m³].
-- **`gas_compressibility` (`bool`):** Enables compressible gas regime.
+- **`water_viscosity` (`float`):** Dynamic water viscosity $\mu_w$ [Pa·s] (alias for `mu_w`).
+- **`water_density` (`float`):** Water density $\rho_w$ [kg/m³] (alias for `rho_w`).
+- **`gas_viscosity` (`float`):** Dynamic gas viscosity $\mu_g$ [Pa·s] (alias for `mu_g`).
+- **`gas_density` (`float`):** Reference gas density $\rho_g$ [kg/m³] (alias for `rho_g`).
+- **`gas_compressibility` (`bool`):** Enables compressible gas regime (alias for `gas_comp_prop.compressibility`).
 - **`gas_state_equation` (`pyfossil.GasStateEquationModel`):**
   - `GasStateEquationModel.IDEAL_GAS`: Ideal gas law.
-  - `GasStateEquationModel.DENSITY_TABLE`: Discrete tabular PVT relationship of Pressure vs. Density.
-- **`table_density_model.density_table` (`dict[float, float]`):** Dictionary mapping `{Pressure [Pa]: Density [kg/m³]}`.
-- **`gravity` (`bool`):** Enables gravitational acceleration and buoyancy terms.
+  - `GasStateEquationModel.EXPONENTIAL`: Exponential compressibility equation of state.
+  - `GasStateEquationModel.LINEAR`: Linear compressibility equation of state.
+  - `GasStateEquationModel.DENSITY_TABLE` (or `TABLE`): Discrete tabular PVT relationship of Pressure vs. Density.
+- **`table_density_model.density_table` (`dict[float, float]`):** Dictionary mapping `{Pressure [Pa]: Density [kg/m³]}` with automatic spline interpolation.
+- **`gravity` (`bool`):** Enables gravitational acceleration and buoyancy terms (alias for `grav_acl.using_gravity`).
 - **`gravity_direction` (`list[float]`):** Gravitational acceleration vector $[g_x, g_y, g_z]$ [m/s²].
 
 ---
 
 ### 1.5 Rock Petrophysics (`sim.rock_properties`)
-- **`perm_x`, `perm_y`, `perm_z` (`float`):** Absolute permeabilities in X, Y, and Z [m²]. *(Note: $1\text{ mD} \approx 9.86923\times 10^{-16}\text{ m}^2$)*.
-- **`porosity` (`float`):** Porosity of the porous medium $\phi \in (0, 1)$.
-- **`perm_filename` (`str`):** External data point cloud file for permeability (e.g., SPE 10 Model 2).
-- **`por_filename` (`str`):** External data point cloud file for porosity.
+- **`perm_x`, `perm_y`, `perm_z` (`float`):** Absolute permeabilities in X, Y, and Z [m²] (aliases for `permeability_x`, `permeability_y`, `permeability_z`). *(Note: $1\text{ mD} \approx 9.86923\times 10^{-16}\text{ m}^2$)*.
+- **`porosity` (`float`):** Porosity of the porous medium $\phi \in (0, 1)$ (alias `por`).
+- **`permeability_filename` (`str`):** External data point cloud file for permeability (alias `perm_filename`).
+- **`porosity_filename` (`str`):** External data point cloud file for porosity (alias `por_filename`).
 - **`use_material_ids` (`bool`):** Enables petrophysical mapping across Gmsh physical region tags.
   - `permeability_x_map` (`dict[int, float]`): Material mapping `{Material_ID: Perm_X}`.
   - `porosity_map` (`dict[int, float]`): Material mapping `{Material_ID: Porosity}`.
@@ -65,55 +67,104 @@ Used when `mesh_type = MeshType.UNSTRUCTURED_MESH`.
   - `synthetic_rock_field.permeability_avg`: Mean permeability [m²].
   - `synthetic_rock_field.porosity_avg`: Mean porosity.
   - `synthetic_rock_field.heterogeneity`: Log-normal variance parameter.
-- **`upscaling`:** Directional petrophysical upscaling manager:
+- **Petrophysical Upscaling (`sim.petrophysical_upscaling`):** Directional cell-by-cell upscaling engine:
+  - `active` (`bool`): Enables petrophysical upscaling.
   - `method_x`, `method_y`, `method_z` (`pyfossil.UpscalingMethod`): `ARITHMETIC`, `HARMONIC`, `GEOMETRIC`, `POWER_LAW`.
-  - `power_law_exponent_x`, `power_law_exponent_y`: Power-law averaging exponent (e.g., 0.33).
+  - `por_method` (`pyfossil.UpscalingMethod`): Pore-volume conserving porosity upscaling.
+  - `power_law_p` (`float`): Exponent used when `method = POWER_LAW`.
 
 ---
 
 ### 1.6 Rock-Fluid Interactions (`sim.rock_fluid_interactions`)
-- **`swc` (`float`):** Connate / irreducible water saturation $S_{wc}$.
-- **`sgr` (`float`):** Residual gas saturation $S_{gr}$.
-- **`sigma_wg` (`float`):** Water-gas interfacial tension $\sigma_{wg}$ [N/m].
-- **`rel_perm_model` (`pyfossil.RelativePermeabilityModel`):**
-  - `COREY_BROOKS_KR`: Standard Corey-Brooks model.
-  - `KOVSCEK_KR`: Cubic Kovscek curves.
-  - `ASHOORI_KR`: Quadratic Ashoori curves.
-  - `CUSTOM_KR`: Custom saturation exponents $N_w$ and $N_g$ (`custom_rel_perm.nw`, `ng`).
-- **`cap_pressure_model` (`pyfossil.CapillaryPressureModel`):**
-  - `NONE`: Neglect capillary pressure.
+- **`connate_water_saturation` (`float`):** Connate / irreducible water saturation $S_{wc}$ (aliases: `swc`, `residual_water_saturation`, `critical_water_saturation`).
+- **`residual_gas_saturation` (`float`):** Residual gas saturation $S_{gr}$ (aliases: `sgr`, `critical_gas_saturation`).
+- **`interfacial_tension` (`float`):** Water-gas interfacial tension $\sigma_{wg}$ [N/m] (aliases: `sigma_wg`, `surface_tension`).
+- **`relative_permeability_model` (`pyfossil.RelativePermeabilityModel`):** (alias `rel_perm_model`)
+  - `COREY_BROOKS` (`COREY_BROOKS_KR`): Standard Corey-Brooks model.
+  - `CUSTOM` (`CUSTOM_KR`): Custom saturation exponents $N_w$ and $N_g$ (`custom_rel_perm.nw`, `ng`).
+  - `ASHOORI` (`ASHOORI_KR`): Ashoori quadratic relative permeability.
+  - `TABLE`: Tabular relative permeability.
+  - `NONE`: Linear relative permeability.
+- **`capillary_pressure_model` (`pyfossil.CapillaryPressureModel`):** (alias `cap_pressure_model`)
+  - `NONE` (`NONE_CP`): Neglect capillary pressure.
   - `LEVERETT_J`: Leverett J-function scaled by local permeability and porosity.
-  - `KOVSCEK_CP`, `ASHOORI_CP`: Foam-specific capillary formulations.
+  - `ASHOORI` (`ASHOORI_CP`): Ashoori capillary model.
+  - `TABLE`: Tabular capillary pressure curve.
 
 ---
 
-### 1.7 EOR Mechanisms & Foam Models (`sim.eor_mechanisms`)
-- **`foam_model` (`pyfossil.FoamModel`):** `NONE`, `KOVSCEK`, `ASHOORI`.
-- **Ashoori Model Parameters (`sim.eor_mechanisms.ashoori_model`):**
-  - `A`: Lamella division bubble generation parameter.
-  - `sw_critical`: Critical water saturation for capillary transition.
-  - `max_mob_red`: Maximum gas mobility reduction factor ($MRF$).
-  - `K_c`: Lamella destruction rate constant [s⁻¹].
-- **Kovscek Model Parameters (`sim.eor_mechanisms.kovscek_model`):**
-  - `k01`: Lamella generation rate coefficient.
-  - `k0m1`: Lamella coalescence rate coefficient.
-  - `refSurf`: Reference critical surfactant concentration [wt%].
-  - `alpha`: Bretherton shear-thinning exponent.
-  - `pcStarMax`: Limiting capillary pressure for lamella rupture [Pa].
+### 1.7 EOR Mechanisms & Foam Models (`sim.eor_mechanisms` or `sim.foam`)
+The foam physics subsection can be accessed either as `sim.eor_mechanisms`, `sim.foam`, or `sim.physical_models`:
+- **`model` (`pyfossil.FoamModel`):** (alias `foam_model`)
+  - `FoamModel.NONE`: Two-phase displacement without foam.
+  - `FoamModel.KOVSCEK`: Mechanistic bubble population balance (snap-off & capillary suction coalescence).
+  - `FoamModel.ASHOORI`: Kinetic limiting capillary pressure foam model.
+  - `FoamModel.STARS`: Empirical mobility reduction model (CMG STARS standard).
+  - `FoamModel.ZITHA`: Dynamic foam quality and pore-throat bubble generation model.
+  - `FoamModel.LAMAP`: Look-up apparent mobility approach.
+- **`max_foam_texture` (`float`):** Limiting bubble density $n_{\max}$ [1/m³] (aliases: `n_max`, `max_texture`, `max_bubble_density`).
+
+#### Sub-Model Shortcuts:
+- **Ashoori Model (`sim.foam.ashoori` or `sim.eor_mechanisms.ashoori_model`):**
+  - `generation_parameter` (alias `A`): Lamella division bubble generation parameter.
+  - `critical_water_saturation` (alias `sw_critical`): Critical water saturation for capillary transition.
+  - `max_mobility_reduction` (aliases `maximum_mobility_reduction`, `max_mob_red`, `max_mrf`): Maximum gas mobility reduction factor ($MRF$).
+  - `destruction_time_constant` (aliases `coalescence_rate`, `time_constant`, `K_c`): Lamella destruction rate constant [s⁻¹].
+- **Kovscek Model (`sim.foam.kovscek` or `sim.eor_mechanisms.kovscek_model`):**
+  - `generation_rate` (aliases `bubble_generation_coeff`, `k01`): Lamella generation rate coefficient.
+  - `coalescence_rate` (aliases `bubble_coalescence_coeff`, `destruction_rate`, `k0m1`): Lamella coalescence rate coefficient.
+  - `limiting_capillary_pressure` (aliases `critical_capillary_pressure`, `max_capillary_pressure`, `pcStarMax`): Limiting capillary pressure for lamella rupture [Pa].
+  - `reference_surfactant` (aliases `reference_surfactant_concentration`, `critical_surfactant_concentration`, `refSurf`): Reference critical surfactant threshold [wt%].
+  - `max_trapped_fraction` (aliases `maximum_trapped_fraction`, `trapping_coefficient`, `XtMax`): Trapped foam bubble fraction.
+  - `water_endpoint_rel_perm` / `gas_endpoint_rel_perm` (`krw0`, `krg0`): Relative permeability endpoints.
+  - `water_rel_perm_exponent` / `gas_rel_perm_exponent` (`nw`, `ng`): Relative permeability exponents.
+  - `hirasaki_velocity_exponent` (alias `alpha`): Apparent shear-thinning exponent.
+  - `constant_trapping` (alias `const_trapping`): Assumes constant trapped bubble fraction.
+- **STARS Model (`sim.foam.stars` or `sim.eor_mechanisms.stars_model`):**
+  - `max_mobility_reduction` (alias `fmmob`): Reference mobility reduction multiplier.
+  - `critical_water_saturation` (aliases `dry_out_saturation`, `fmsw`): Wetting phase collapse saturation.
+  - `transition_sharpness` (alias `sfbet`): Transition steepness parameter $\beta$.
+  - `reference_surfactant` (alias `fmsurf`): Critical surfactant threshold [wt%].
+  - `surfactant_exponent` (alias `esurf`): Surfactant exponent.
+  - `reference_capillary_number` (alias `fmcap`): Critical capillary number.
+  - `capillary_number_exponent` (alias `ecap`): Capillary number exponent.
+  - `shear_thinning_exponent` (alias `epcap`): Shear-thinning velocity exponent.
+- **Zitha Model (`sim.foam.zitha` or `sim.eor_mechanisms.zitha_model`):**
+  - `generation_rate` (`C_g`), `destruction_rate` (`C_c`).
+  - `max_water_rel_perm` (`krw0`), `max_foamed_gas_rel_perm` (`krgf0`).
+  - `effective_pore_radius` (`r_eff`), `contact_angle` (`theta`).
+- **LAMAP Model (`sim.foam.lamap` or `sim.eor_mechanisms.lamap_model`):**
+  - `apparent_viscosity_table` (alias `visc_foam_table`): Mapping $\{f_g: \mu_{\text{app}}\}$.
 
 ---
 
-### 1.8 Peaceman Well System (`sim.wells`)
-Dictionary of wells indexed by identifier string (`sim.wells["WellName"]`):
-- **`well_type` (`pyfossil.WellType`):** `INJECTOR` or `PRODUCER`.
-- **`well_control` (`pyfossil.WellControl`):**
-  - `WellControl.FLOW_RATE`: Target volumetric flow rate [m³/s].
-  - `WellControl.BHP`: Bottom-Hole Pressure constraint [Pa].
-- **`well_value` (`float` or `dict`):** Operational constraint value (supports piecewise schedules `{time: value}`).
-- **`well_radius` (`float`):** Wellbore radius $r_w$ [m].
-- **`skin_factor` (`float`):** Dimensionless well skin factor.
-- **`include_hydrostatic_head` (`bool`):** Accounts for hydrostatic fluid head variation along well perforations.
-- **`trajectory_coords` (`list[float]`):** 3D well trajectory coordinates `[x1, y1, z1, x2, y2, z2]` from heel to toe.
+### 1.8 Peaceman Well Management (`sim.wells`)
+Wells can be accessed, created, and iterated directly through the `sim.wells` dictionary proxy:
+```python
+# Auto-creates and registers "INJ1" if not present:
+inj = sim.wells["INJ1"]
+inj.well_type = pf.WellType.INJECTOR
+inj.well_control = pf.WellControl.FLOW_RATE   # or pf.WellConstraintType.FLOW_RATE
+inj.well_value = 1.0e-3                       # direct float or schedule dict
+inj.well_radius = 0.1                         # wellbore radius [m]
+inj.skin = 0.0                                # skin factor
+inj.wfrac = 1.0                               # well angular fraction (0.25 for quarter-well)
+inj.trajectory_coords = [0.0, 0.0, 0.0, 0.0, 0.0, 10.0]
+inj.injected_fluid = {pf.Variable.SW: 1.0}
+
+# Producers:
+prod = sim.wells["PROD1"]
+prod.well_type = pf.WellType.PRODUCER
+prod.well_control = pf.WellControl.BHP
+prod.well_value = 2.0e7                       # 200 bar BHP
+
+# Iteration and introspection:
+print(f"Total active wells: {len(sim.wells)}")
+for well in sim.wells:
+    print(f"Well {well.name}: type={well.well_type}")
+if "INJ1" in sim.wells:
+    print("INJ1 is configured!")
+```
 
 ---
 
