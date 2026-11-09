@@ -68,25 +68,39 @@ Built on top of leading numerical libraries (**deal.II**, **SUNDIALS**, **PETSc*
 `pyfossil` is distributed as a **standalone ManyLinux wheel** with all scientific dependencies (**deal.II, PETSc, HYPRE, SUNDIALS, NLopt, OpenBLAS, TBB**) pre-compiled and bundled inside the package. **No compilation or external library installation is required.**
 
 ### Prerequisites
-- Operating System: **Linux x86_64** (Ubuntu 20.04+, Debian 11+, CentOS/RHEL 8+, Fedora 34+, etc.)
-- Python: **3.8 to 3.12**
+- Operating System: **Linux x86_64** (Ubuntu 20.04+, Debian 11+, CentOS/RHEL 8+, Fedora 34+, Arch Linux, etc.)
+- Python: **3.12, 3.13, or 3.14**
 - Basic libraries:
   ```bash
   pip install numpy matplotlib
   ```
 
 ### Install from GitHub Releases
-Download and install the latest standalone wheel directly:
+Download and install the pre-compiled standalone wheel matching your active Python version:
 
 ```bash
+# Python 3.14 (Ubuntu 26.04 / Lubuntu 26.04 Rolling)
+pip install https://github.com/fylype/pyfossil/releases/download/v1.0.0/pyfossil-1.0.0-cp314-cp314-manylinux_2_39_x86_64.whl
+
+# Python 3.13
+pip install https://github.com/fylype/pyfossil/releases/download/v1.0.0/pyfossil-1.0.0-cp313-cp313-manylinux_2_39_x86_64.whl
+
+# Python 3.12 (Ubuntu 24.04 LTS / Windows WSL Ubuntu 24.04)
 pip install https://github.com/fylype/pyfossil/releases/download/v1.0.0/pyfossil-1.0.0-cp312-cp312-manylinux_2_39_x86_64.whl
 ```
-*(Replace `cp312` with your Python version tag if multiple wheels are available).*
 
-Or install a locally downloaded wheel:
+Or install from a locally downloaded wheel:
 ```bash
 pip install pyfossil-1.0.0-*.whl
 ```
+
+> **Tip for Lubuntu / Ubuntu 26.04 Users:**  
+> Since Lubuntu defaults to Python 3.14, use the `cp314` wheel above. Alternatively, if you wish to run in a Python 3.12 environment on Lubuntu, create an isolated virtual environment:
+> ```bash
+> sudo apt install python3.12 python3.12-venv
+> python3.12 -m venv ~/fossil_env && source ~/fossil_env/bin/activate
+> pip install pyfossil-1.0.0-cp312-*.whl
+> ```
 
 To verify the installation:
 ```python

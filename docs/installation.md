@@ -9,7 +9,7 @@ All high-performance scientific libraries (**deal.II, PETSc, HYPRE, SUNDIALS, NL
 ## 💻 System Requirements
 
 - **Operating System:** Linux x86_64 (Ubuntu 20.04+, Debian 11+, CentOS/RHEL 8+, Fedora 34+, Arch Linux, etc.).
-- **Python:** Versions 3.8 through 3.12 (64-bit).
+- **Python:** Versions 3.12 through 3.14 (64-bit).
 - **Core Python Dependencies:** `numpy` (>= 1.20) and `matplotlib` (>= 3.3).
 
 ---
@@ -18,13 +18,26 @@ All high-performance scientific libraries (**deal.II, PETSc, HYPRE, SUNDIALS, NL
 
 ### Method 1: Direct Installation from GitHub Releases (Recommended)
 
-You can install the wheel directly from the GitHub Releases page without cloning the repository:
+You can install the wheel matching your Python version directly from the GitHub Releases page:
 
 ```bash
+# For Python 3.14 (Ubuntu 26.04 / Lubuntu 26.04 Rolling)
+pip install https://github.com/fylype/pyfossil/releases/download/v1.0.0/pyfossil-1.0.0-cp314-cp314-manylinux_2_39_x86_64.whl
+
+# For Python 3.13
+pip install https://github.com/fylype/pyfossil/releases/download/v1.0.0/pyfossil-1.0.0-cp313-cp313-manylinux_2_39_x86_64.whl
+
+# For Python 3.12 (Ubuntu 24.04 LTS / Windows WSL Ubuntu 24.04)
 pip install https://github.com/fylype/pyfossil/releases/download/v1.0.0/pyfossil-1.0.0-cp312-cp312-manylinux_2_39_x86_64.whl
 ```
 
-*(Note: Replace `cp312` with your Python version tag, e.g., `cp310`, `cp311`, or `cp312`).*
+> **Tip for Lubuntu / Ubuntu 26.04 Users:**  
+> Since Lubuntu defaults to Python 3.14, install the `cp314` wheel above. Alternatively, if you wish to run in a Python 3.12 environment on Lubuntu, create an isolated virtual environment:
+> ```bash
+> sudo apt install python3.12 python3.12-venv
+> python3.12 -m venv ~/fossil_env && source ~/fossil_env/bin/activate
+> pip install pyfossil-1.0.0-cp312-*.whl
+> ```
 
 ---
 
