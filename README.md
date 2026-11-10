@@ -58,7 +58,7 @@ Built on top of leading numerical libraries (**deal.II**, **SUNDIALS**, **PETSc*
 
 - **Advanced Physical Models**:
   - Foam rheology and texture models (Ashoori et al., Chen et al.).
-  - Peaceman well models with hydrostatic wellbore head and dynamic constraint switching (BHP $\leftrightarrow$ Rate) via Python callbacks.
+  - Peaceman well models with hydrostatic wellbore head, dynamic constraint switching (BHP $\leftrightarrow$ Rate), and real-time mechanical skin factor ($s$) adjustment with instant $WI^*$ re-indexing via Python callbacks.
   - Directional petrophysical upscaling (Arithmetic, Harmonic, Geometric, Power-Law).
 
 ---

@@ -147,7 +147,7 @@ inj.well_type = pf.WellType.INJECTOR
 inj.well_control = pf.WellControl.FLOW_RATE   # or pf.WellConstraintType.FLOW_RATE
 inj.well_value = 1.0e-3                       # direct float or schedule dict
 inj.well_radius = 0.1                         # wellbore radius [m]
-inj.skin = 0.0                                # skin factor
+inj.skin_factor = 0.0                         # mechanical skin factor s (or inj.skin = 0.0)
 inj.wfrac = 1.0                               # well angular fraction (0.25 for quarter-well)
 inj.trajectory_coords = [0.0, 0.0, 0.0, 0.0, 0.0, 10.0]
 inj.injected_fluid = {pf.Variable.SW: 1.0}
@@ -231,7 +231,14 @@ simulator = pyfossil.FossilSimulator(sim_data, output_dir="./output")
 - **`set_step_callback(callback_fn)`:** Registers a Python callback invoked after each macro time step.
   - Callback signature: `callback(t_physical: float, sim, sim_data) -> bool`
   - Returning `True` continues simulation; returning `False` triggers graceful early termination.
-- **`get_current_well_bhp(well_name: str) -> float`:** Returns the current Bottom-Hole Pressure of the specified well in Pascals.
-- **`get_current_well_rate(well_name: str) -> float`:** Returns the current volumetric flow rate of the specified well in m³/s.
+- **`get_current_well_bhp(well_name: str) -> float`:** Returns the current Bottom-Hole Pressure of the specified well in Pascals [Pa].
+- **`get_current_well_rate(well_name: str) -> float`:** Returns the current total volumetric flow rate of the specified well in m³/s.
 - **`set_well_bhp(well_name: str, bhp_pa: float)`:** Dynamically modifies the target BHP of a well during execution.
 - **`set_well_rate(well_name: str, rate_m3_s: float)`:** Dynamically modifies the target flow rate of a well during execution.
+- **`set_well_skin(well_name: str, skin_factor: float)`:** Dynamically modifies the mechanical skin factor $s$ [-] of the named well and immediately recomputes the cached geometric Peaceman well index ($WI^*$) across all completions in $O(N_{\text{completions}})$ time.
+- **`get_well_skin(well_name: str) -> float`:** Returns the current mechanical skin factor $s$ [-] for the specified well.
+- **`get_well_total_wi(well_name: str) -> float`:** Returns the aggregated geometric Peaceman well index ($\sum_k WI_k^*$) summed across all completions of the specified well.
+- **`set_well_operation(well_name: str, op: Enum_WellOperation)`:** Changes well operational state (`pf.WellOperation.OPEN` or `pf.WellOperation.SHUT_IN`).
+- **`get_well_operation(well_name: str) -> Enum_WellOperation`:** Queries well operational state.
+- **`get_well_names() -> list[str]`:** Returns list of all registered well names.
+- **`get_boundary_names() -> list[str]`:** Returns list of all model boundary face names.
