@@ -3999,6 +3999,19 @@ class FossilSimulator2D:
     def set_well_operation(self, well_name: str, operation: Enum_WellOperation) -> None:
         """Changes the operational state of a well."""
 
+    def set_well_skin(self, well_name: str, skin_factor: float) -> None:
+        """
+        Sets mechanical skin factor for the specified well and recalculates cached geometric well indices.
+        """
+
+    def get_well_skin(self, well_name: str) -> float:
+        """Gets the mechanical skin factor for the specified well."""
+
+    def get_well_total_wi(self, well_name: str) -> float:
+        """
+        Gets the total geometric Peaceman well index (WI*) summed across all completions of the well.
+        """
+
     def get_current_well_bhp(self, well_name: str) -> float:
         """
         Returns the instantaneous Bottom-Hole Pressure (BHP) of the well in Pascals [Pa].
@@ -4148,6 +4161,19 @@ class FossilSimulator3D:
 
     def set_well_operation(self, well_name: str, operation: Enum_WellOperation) -> None:
         """Changes the operational state of a well."""
+
+    def set_well_skin(self, well_name: str, skin_factor: float) -> None:
+        """
+        Sets mechanical skin factor for the specified well and recalculates cached geometric well indices.
+        """
+
+    def get_well_skin(self, well_name: str) -> float:
+        """Gets the mechanical skin factor for the specified well."""
+
+    def get_well_total_wi(self, well_name: str) -> float:
+        """
+        Gets the total geometric Peaceman well index (WI*) summed across all completions of the well.
+        """
 
     def get_current_well_bhp(self, well_name: str) -> float:
         """
