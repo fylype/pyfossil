@@ -22,13 +22,13 @@ You can install the wheel matching your Python version directly from the GitHub 
 
 ```bash
 # For Python 3.14 (Ubuntu 26.04 / Lubuntu 26.04 Rolling)
-pip install https://github.com/fylype/pyfossil/releases/download/v1.0.0/pyfossil-1.0.0-cp314-cp314-manylinux_2_39_x86_64.whl
+pip install https://github.com/fylype/pyfossil/releases/download/v1.1.0/pyfossil-1.1.0-cp314-cp314-manylinux_2_39_x86_64.whl
 
 # For Python 3.13
-pip install https://github.com/fylype/pyfossil/releases/download/v1.0.0/pyfossil-1.0.0-cp313-cp313-manylinux_2_39_x86_64.whl
+pip install https://github.com/fylype/pyfossil/releases/download/v1.1.0/pyfossil-1.1.0-cp313-cp313-manylinux_2_39_x86_64.whl
 
 # For Python 3.12 (Ubuntu 24.04 LTS / Windows WSL Ubuntu 24.04)
-pip install https://github.com/fylype/pyfossil/releases/download/v1.0.0/pyfossil-1.0.0-cp312-cp312-manylinux_2_39_x86_64.whl
+pip install https://github.com/fylype/pyfossil/releases/download/v1.1.0/pyfossil-1.1.0-cp312-cp312-manylinux_2_39_x86_64.whl
 ```
 
 > **Tip for Lubuntu / Ubuntu 26.04 Users:**  
@@ -36,7 +36,7 @@ pip install https://github.com/fylype/pyfossil/releases/download/v1.0.0/pyfossil
 > ```bash
 > sudo apt install python3.12 python3.12-venv
 > python3.12 -m venv ~/fossil_env && source ~/fossil_env/bin/activate
-> pip install pyfossil-1.0.0-cp312-*.whl
+> pip install pyfossil-1.1.0-cp312-*.whl
 > ```
 
 ---
@@ -46,7 +46,7 @@ pip install https://github.com/fylype/pyfossil/releases/download/v1.0.0/pyfossil
 If you have downloaded the `.whl` file locally to your machine:
 
 ```bash
-pip install pyfossil-1.0.0-*.whl
+pip install pyfossil-1.1.0-*.whl
 ```
 
 ---
@@ -61,7 +61,7 @@ python3 -c "import pyfossil; print(f'pyfossil v{pyfossil.__version__} loaded suc
 
 Expected output:
 ```text
-pyfossil v1.0.0 loaded successfully!
+pyfossil v1.1.0 loaded successfully!
 SimulationData initialization OK!
 ```
 
@@ -83,5 +83,5 @@ pip install --upgrade pip
 pip install numpy matplotlib pyvista pandas
 
 # Install pyfossil
-pip install pyfossil-1.0.0-*.whl
+pip install pyfossil-1.1.0-*.whl
 ```

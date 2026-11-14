@@ -42,9 +42,17 @@ $$H \boldsymbol{\Lambda} = \mathbf{R}$$
 
 ---
 
-## 🚀 2. Implicit Multiphase Transport: JFNK Formulation
+## 🚀 2. Multiphase Transport: Schemes, Time Integrators & JFNK
 
-The hyperbolic conservation laws governing water saturation ($S_w$), foam texture ($n_D$), and surfactant ($C_s$) exhibit strong flux nonlinearities and stiff kinetics requiring implicit multi-step time integration (**SUNDIALS CVODE BDF**).
+The hyperbolic-parabolic conservation laws governing water saturation ($S_w$), foam texture ($n_D$), surfactant ($C_s$), and adsorbed surfactant ($C_{a,\text{kin}}$) can be discretized with:
+- **`NumericalMethod.KNP`:** Kurganov-Noelle-Petrova (2001) central-upwind scheme (default).
+- **`NumericalMethod.KPP`:** Kurganov-Petrova-Popova (2007) central-upwind scheme with extrema search (`NonConvexFluxStrategy`: `NONE`, `BRUTE_FORCE`, `STEEPEST_DESCENT`, `NLOPT_OPTIMIZATION`) for non-convex fractional flows.
+- **`NumericalMethod.KT`:** Kurganov-Tadmor (2000) central scheme.
+- **`NumericalMethod.UPWIND`:** First-order upwind scheme.
+
+Time integration supports:
+- **`TimeIntegrator.BDF` (SUNDIALS CVODE):** Implicit variable-order, variable-step BDF for stiff systems, paired with **`NonlinearSolver.NEWTON`** (JFNK), **`FIXED_POINT`** (Anderson-accelerated), or **`AUTO`**.
+- **`TimeIntegrator.ERK` (SUNDIALS ARKODE `ERKStep`):** Adaptive explicit Runge-Kutta for non-stiff hyperbolic regimes.
 
 ### 2.1 What is JFNK (Jacobian-Free Newton-Krylov)?
 In traditional matrix-based implicit methods, each Newton iteration requires assembling, allocating, and storing a massive coupled Jacobian matrix, consuming hundreds of gigabytes of RAM on fine 3D grids.

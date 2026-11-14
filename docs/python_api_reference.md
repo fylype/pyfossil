@@ -14,7 +14,7 @@ sim = pyfossil.SimulationData()
 ```
 
 ### 1.1 Global Settings (`sim.global_settings`)
-- **`dimension` (`int`):** Spatial dimension of the domain (`1`, `2`, or `3`).
+- **`dimension` (`int`):** Spatial dimension of the domain (`2` or `3`). Use a single cell along Y/Z (`n_y = 1`, `n_z = 1`) for 1D corefloods.
 - **`mesh_type` (`pyfossil.MeshType`):**
   - `MeshType.ORTHOGONAL_MESH`: Structured Cartesian / orthogonal grid.
   - `MeshType.UNSTRUCTURED_MESH`: Unstructured mesh imported from Gmsh (`.msh`).
@@ -67,11 +67,10 @@ Used when `mesh_type = MeshType.UNSTRUCTURED_MESH`.
   - `synthetic_rock_field.permeability_avg`: Mean permeability [m²].
   - `synthetic_rock_field.porosity_avg`: Mean porosity.
   - `synthetic_rock_field.heterogeneity`: Log-normal variance parameter.
-- **Petrophysical Upscaling (`sim.petrophysical_upscaling`):** Directional cell-by-cell upscaling engine:
-  - `active` (`bool`): Enables petrophysical upscaling.
+- **Petrophysical Upscaling (`sim.rock_properties.upscaling`):** Directional cell-by-cell upscaling engine:
   - `method_x`, `method_y`, `method_z` (`pyfossil.UpscalingMethod`): `ARITHMETIC`, `HARMONIC`, `GEOMETRIC`, `POWER_LAW`.
   - `por_method` (`pyfossil.UpscalingMethod`): Pore-volume conserving porosity upscaling.
-  - `power_law_p` (`float`): Exponent used when `method = POWER_LAW`.
+  - `power_law_exponent_x`, `power_law_exponent_y`, `power_law_exponent_z`, `power_law_exponent_por` (`float`): Exponents used when `POWER_LAW` is selected.
 
 ---
 
@@ -83,13 +82,16 @@ Used when `mesh_type = MeshType.UNSTRUCTURED_MESH`.
   - `COREY_BROOKS` (`COREY_BROOKS_KR`): Standard Corey-Brooks model.
   - `CUSTOM` (`CUSTOM_KR`): Custom saturation exponents $N_w$ and $N_g$ (`custom_rel_perm.nw`, `ng`).
   - `ASHOORI` (`ASHOORI_KR`): Ashoori quadratic relative permeability.
-  - `TABLE`: Tabular relative permeability.
-  - `NONE`: Linear relative permeability.
+  - `KOVSCEK_KR`: Kovscek foam relative permeability model.
+  - `ZITHA_KR`: Zitha foam relative permeability model.
+  - `TABLE` (`TABLE_KR`): Tabular relative permeability.
 - **`capillary_pressure_model` (`pyfossil.CapillaryPressureModel`):** (alias `cap_pressure_model`)
   - `NONE` (`NONE_CP`): Neglect capillary pressure.
   - `LEVERETT_J`: Leverett J-function scaled by local permeability and porosity.
   - `ASHOORI` (`ASHOORI_CP`): Ashoori capillary model.
-  - `TABLE`: Tabular capillary pressure curve.
+  - `KOVSCEK_CP`: Kovscek capillary pressure model (includes an empirical safeguard clamping exponent blow-up below $S_w = 0.15$).
+  - `ZITHA_CP`: Zitha capillary pressure model.
+  - `TABLE` (`TABLE_CP`): Tabular capillary pressure curve.
 
 ---
 
@@ -101,7 +103,6 @@ The foam physics subsection can be accessed either as `sim.eor_mechanisms`, `sim
   - `FoamModel.ASHOORI`: Kinetic limiting capillary pressure foam model.
   - `FoamModel.STARS`: Empirical mobility reduction model (CMG STARS standard).
   - `FoamModel.ZITHA`: Dynamic foam quality and pore-throat bubble generation model.
-  - `FoamModel.LAMAP`: Look-up apparent mobility approach.
 - **`max_foam_texture` (`float`):** Limiting bubble density $n_{\max}$ [1/m³] (aliases: `n_max`, `max_texture`, `max_bubble_density`).
 
 #### Sub-Model Shortcuts:
@@ -133,8 +134,12 @@ The foam physics subsection can be accessed either as `sim.eor_mechanisms`, `sim
   - `generation_rate` (`C_g`), `destruction_rate` (`C_c`).
   - `max_water_rel_perm` (`krw0`), `max_foamed_gas_rel_perm` (`krgf0`).
   - `effective_pore_radius` (`r_eff`), `contact_angle` (`theta`).
-- **LAMAP Model (`sim.foam.lamap` or `sim.eor_mechanisms.lamap_model`):**
-  - `apparent_viscosity_table` (alias `visc_foam_table`): Mapping $\{f_g: \mu_{\text{app}}\}$.
+- **Surfactant Properties & Adsorption (`sim.eor_mechanisms.surfactant_properties` or `sim.foam.surfactant`):**
+  - `adsorption_behavior` (`pyfossil.AdsorptionBehavior`): `NONE`, `EQUILIBRIUM`, `KINETIC`, `MIXED`.
+  - `d_s` (`float`): Surfactant dispersion coefficient [m²/s].
+  - `equilibrium_adsorption_model` (`pyfossil.EquilibriumAdsorptionModel`): `NONE`, `LINEAR`, `LANGMUIR`, `SIPS`.
+  - `non_equilibrium_adsorption_model` (`pyfossil.KineticAdsorptionModel`): `NONE`, `LINEAR`, `LANGMUIR`, `SIPS`, `PSEUDO_FIRST_ORDER`, `PSEUDO_SECOND_ORDER`.
+  - Sub-model structs: `linear_equilibrium_model`, `langmuir_equilibrium_model`, `sips_equilibrium_model`, `linear_non_equilibrium_model`, `langmuir_non_equilibrium_model`, `sips_non_equilibrium_model`, `p_first_order_non_equilibrium_model`, `p_sec_order_non_equilibrium_model`.
 
 ---
 
@@ -149,6 +154,8 @@ inj.well_value = 1.0e-3                       # direct float or schedule dict
 inj.well_radius = 0.1                         # wellbore radius [m]
 inj.skin_factor = 0.0                         # mechanical skin factor s (or inj.skin = 0.0)
 inj.wfrac = 1.0                               # well angular fraction (0.25 for quarter-well)
+inj.use_hydrostatic_head = True               # gravitational head correction (alias: include_hydrostatic_head)
+inj.use_cell_mobility = True                  # use cell local mobility vs endpoint mobility
 inj.trajectory_coords = [0.0, 0.0, 0.0, 0.0, 0.0, 10.0]
 inj.injected_fluid = {pf.Variable.SW: 1.0}
 
@@ -188,6 +195,9 @@ if "INJ1" in sim.wells:
   - `Variable.SW`: Water saturation.
   - `Variable.ND`: Foam bubble texture density.
   - `Variable.CS`: Surfactant concentration.
+  - `Variable.CA_EQ`: Equilibrium adsorbed surfactant concentration.
+  - `Variable.CA_KIN`: Kinetic adsorbed surfactant concentration.
+  *(Auxiliary field identifiers `PERMX`, `PERMY`, `PERMZ`, `POR`, `RHO_G`, `VISC` are also available for `get_transport_data`.)*
 - **`darcy_linear_solver` (`pyfossil.DarcyLinearSolver`):**
   - `CG`: Conjugate Gradient (ideal for symmetric positive-definite condensed systems).
   - `MINRES`: Minimal Residual (optimal for pure-Neumann problems with nullspace closure).
@@ -214,8 +224,31 @@ if "INJ1" in sim.wells:
 - **`num_method` (`pyfossil.NumericalMethod`):**
   - `KNP`: Central-Upwind scheme of Kurganov, Noelle & Petrova (2001).
   - `KPP`: Central-Upwind scheme of Kurganov, Petrova & Popova (2007) for non-convex fractional flows.
-- **`abstol`, `reltol` (`float`):** Absolute and relative tolerances for CVODE integration.
-- **`num_threads` (`int`):** Number of OpenMP parallel execution threads.
+  - `KT`: Central-Upwind scheme of Kurganov & Tadmor (2000).
+  - `UPWIND`: First-order upwind flux scheme.
+- **`non_convex_flux_strategy` (`pyfossil.NonConvexFluxStrategy`):** Extrema search strategy for `KPP`:
+  - `NONE`, `BRUTE_FORCE`, `STEEPEST_DESCENT`, `NLOPT_OPTIMIZATION`.
+- **`time_integrator` (`pyfossil.TimeIntegrator`):**
+  - `BDF`: SUNDIALS CVODE variable-order implicit BDF integrator.
+  - `ERK`: SUNDIALS ARKODE explicit Runge-Kutta (`ERKStep`) integrator.
+- **`nonlinear_solver` (`pyfossil.NonlinearSolver`):**
+  - `NEWTON`: Inexact Newton-Krylov (JFNK).
+  - `FIXED_POINT`: Anderson-accelerated fixed-point iteration.
+  - `AUTO`: Heuristic dynamic switching.
+- **`abstol`, `reltol` (`float`):** Absolute and relative tolerances for SUNDIALS integration.
+- **`num_threads` (`int`):** Number of OpenMP parallel execution threads (defaults automatically to physical CPU cores unless explicitly set).
+
+---
+
+### 1.11 Output Control (`sim.output_control`)
+- **`output_mode` (`pyfossil.OutputMode`):** `PERCENT_INTERVAL` or `FIXED_TIMES` (`t_initial` is exported automatically even if `0.0` is not listed in `vtk_output_times`).
+- **`vtk_output_interval` (`float`):** Percentage interval between VTK snapshots (in `PERCENT_INTERVAL` mode).
+- **`vtk_output_times` (`list[float]`):** Explicit physical timestamps [s] (in `FIXED_TIMES` mode).
+- **`write_vtk_volume`, `write_vtk_face` (`bool`):** Enable cell volume and face velocity VTK exports.
+- **`use_csv_format` (`bool`):** `True` exports comma-separated `.csv`; `False` (default) exports tab-separated `.dat`.
+- **`text_output_interval` (`float`):** Tabular logging interval [s] (`0.0` writes every simulator step).
+- **`write_production_file` (`bool`), `write_bhp_file` (`bool`), `write_pressure_drop_file` (`bool`):** Controls `production.*`, `bhp.*` (default `True`), and `pressure_drop.*` (default `False`).
+- **`write_sim_data_report` (`bool`):** Writes a complete simulation configuration report.
 
 ---
 
@@ -225,14 +258,18 @@ Manages grid assembly, physical field mapping, the coupled Darcy-transport time-
 
 ### 2.1 Constructor and Core Methods
 ```python
-simulator = pyfossil.FossilSimulator(sim_data, output_dir="./output")
+simulator = pyfossil.FossilSimulator(sim_data, out_dir="./output")
 ```
 - **`run()`:** Executes the complete simulation from initial state to `final_time`.
-- **`set_step_callback(callback_fn)`:** Registers a Python callback invoked after each macro time step.
+- **`set_step_callback(callback_fn)`:** Registers a Python callback invoked **prior to** the Darcy solve and export tasks at $t = t_{\text{initial}}$ and at each time-loop stop.
   - Callback signature: `callback(t_physical: float, sim, sim_data) -> bool`
   - Returning `True` continues simulation; returning `False` triggers graceful early termination.
+  - Well and boundary modifications made inside the callback take effect on the scheduled Darcy solve with zero extra solve overhead.
+- **`request_darcy_solve()`** *(alias: `force_darcy_solve()`)*: Explicitly requests an immediate Darcy pressure-velocity solve at the current `step_callback` time, even if the current stop is an intermediate output/progress step prior to the next scheduled Darcy macro-step.
 - **`get_current_well_bhp(well_name: str) -> float`:** Returns the current Bottom-Hole Pressure of the specified well in Pascals [Pa].
 - **`get_current_well_rate(well_name: str) -> float`:** Returns the current total volumetric flow rate of the specified well in m³/s.
+- **`get_current_pressure_drop() -> dict[str, float]`:** Returns reservoir pressure statistics [Pa]: `p_max`, `p_min`, `delta_p`, `p_avg`.
+- **`get_current_production_data() -> dict[str, float]`:** Returns trapezoidal step-averaged injection/production rates [m³/s] and cumulative volumes [m³]: `water_inj_rate`, `water_cum_inj`, `water_prod_rate`, `water_cum_prod`, `gas_inj_rate`, `gas_cum_inj`, `gas_prod_rate`, `gas_cum_prod`, `water_volume`, `gas_volume`.
 - **`set_well_bhp(well_name: str, bhp_pa: float)`:** Dynamically modifies the target BHP of a well during execution.
 - **`set_well_rate(well_name: str, rate_m3_s: float)`:** Dynamically modifies the target flow rate of a well during execution.
 - **`set_well_skin(well_name: str, skin_factor: float)`:** Dynamically modifies the mechanical skin factor $s$ [-] of the named well and immediately recomputes the cached geometric Peaceman well index ($WI^*$) across all completions in $O(N_{\text{completions}})$ time.
@@ -242,3 +279,27 @@ simulator = pyfossil.FossilSimulator(sim_data, output_dir="./output")
 - **`get_well_operation(well_name: str) -> Enum_WellOperation`:** Queries well operational state.
 - **`get_well_names() -> list[str]`:** Returns list of all registered well names.
 - **`get_boundary_names() -> list[str]`:** Returns list of all model boundary face names.
+
+---
+
+## 🔬 3. Constitutive Physical Functions (`ModelFunctions`)
+
+Both `SimulationData` (`sim_data.model_functions` / `sim_data.get_model_functions()`) and `FossilSimulator` (`simulator.model_functions` / `simulator.get_model_functions()`) expose the active C++ constitutive models in **physical SI units**. Every method accepts both scalar floats/ints and 1D `numpy.ndarray` inputs:
+
+- **Relative Permeabilities & Exact Derivatives (`Dual<double>`):**
+  - `krw(sw)` *(alias `perm_rel_w`)*, `dkrw_dsw(sw)` *(alias `dperm_rel_w_dsw`)*
+  - `krg(sw)` *(alias `perm_rel_g`)*, `dkrg_dsw(sw)` *(alias `dperm_rel_g_dsw`)*
+- **Phase Mobilities & Fractional Flow:**
+  - `mobility_w(sw)` [1/(Pa·s)], `dmobility_w_dsw(sw)`
+  - `mobility_g(sw, mu_g_or_f=-1.0)` [1/(Pa·s)], `dmobility_g_dsw(sw, mu_g_or_f=-1.0)`
+  - `fw_no_pc(sw, mu_g_or_f=-1.0)` [-], `dfw_no_pc_dsw(sw, mu_g_or_f=-1.0)`
+- **Capillary Pressure & Gas EOS:**
+  - `capillary_pressure(sw, perm=-1.0, por=-1.0)` *(alias `pc`)* [Pa], `capillary_pressure_derivative(sw, perm=-1.0, por=-1.0)` *(alias `dpc_dsw`)* [Pa]
+  - `gas_density(p)` *(alias `rho_g`)* [kg/m³], `gas_density_derivative(p)` *(alias `drho_g_dp`)* [kg/(m³·Pa)]
+- **Surfactant Adsorption & Foam Rheology:**
+  - `equilibrium_adsorbed_surfactant(cs)` *(alias `ca_eq`)*
+  - `raw_from_surfactant_concentration(cs, sw, por=-1.0)` *(alias `raw_from_cs`)*
+  - `surfactant_concentration_from_raw(raw_swcs, sw, por=-1.0)` *(alias `cs_from_raw`)*
+  - `kinetic_adsorption_rate(cs, ca, por=-1.0)` [1/s]
+  - `foam_viscosity(sw, nd=0.0, cs=0.0, u_norm=0.0, perm=-1.0, por=-1.0)` [Pa·s]
+  - `nd_le(sw)` [-], `foam_source(sw, nd, cs=0.0, u_norm=0.0, grad_sw_norm=0.0, p=1e5, perm=-1.0, por=-1.0)` [1/s]

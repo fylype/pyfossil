@@ -5,9 +5,9 @@
 **FOam diSplacement SImuLator — Python Interface**  
 *High-Performance Multiphase & Foam Flow Simulation in Porous Media*
 
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.12--3.14-blue.svg)](https://www.python.org/)
 [![Platform](https://img.shields.io/badge/Platform-Linux%20x86__64-orange.svg)](https://github.com/fylype/pyfossil)
-[![Version](https://img.shields.io/badge/Release-v1.0.0-green.svg)](https://github.com/fylype/pyfossil/releases)
+[![Version](https://img.shields.io/badge/Release-v1.1.0-green.svg)](https://github.com/fylype/pyfossil/releases)
 [![Documentation](https://img.shields.io/badge/Docs-GitHub%20Pages-blue.svg)](https://fylype.github.io/pyfossil/)
 [![License](https://img.shields.io/badge/License-Non--Commercial%20Academic-red.svg)](LICENSE)
 
@@ -57,8 +57,9 @@ Built on top of leading numerical libraries (**deal.II**, **SUNDIALS**, **PETSc*
   - Cartesian structured grids and unstructured Gmsh (`.msh`) meshes with material ID mappings.
 
 - **Advanced Physical Models**:
-  - Foam rheology and texture models (Ashoori et al., Chen et al.).
-  - Peaceman well models with hydrostatic wellbore head, dynamic constraint switching (BHP $\leftrightarrow$ Rate), and real-time mechanical skin factor ($s$) adjustment with instant $WI^*$ re-indexing via Python callbacks.
+  - Foam rheology and texture models (Ashoori et al., Chen et al., Kovscek et al., STARS, Zitha).
+  - Peaceman well models with hydrostatic wellbore head, dynamic constraint switching (BHP $\leftrightarrow$ Rate), and real-time mechanical skin factor ($s$) adjustment with instant $WI^*$ re-indexing via pre-Darcy Python callbacks (`set_step_callback`).
+  - Direct Python access to all constitutive models (`model_functions`) in physical SI units with 1D NumPy vectorization.
   - Directional petrophysical upscaling (Arithmetic, Harmonic, Geometric, Power-Law).
 
 ---
@@ -80,18 +81,18 @@ Download and install the pre-compiled standalone wheel matching your active Pyth
 
 ```bash
 # Python 3.14 (Ubuntu 26.04 / Lubuntu 26.04 Rolling)
-pip install https://github.com/fylype/pyfossil/releases/download/v1.0.0/pyfossil-1.0.0-cp314-cp314-manylinux_2_39_x86_64.whl
+pip install https://github.com/fylype/pyfossil/releases/download/v1.1.0/pyfossil-1.1.0-cp314-cp314-manylinux_2_39_x86_64.whl
 
 # Python 3.13
-pip install https://github.com/fylype/pyfossil/releases/download/v1.0.0/pyfossil-1.0.0-cp313-cp313-manylinux_2_39_x86_64.whl
+pip install https://github.com/fylype/pyfossil/releases/download/v1.1.0/pyfossil-1.1.0-cp313-cp313-manylinux_2_39_x86_64.whl
 
 # Python 3.12 (Ubuntu 24.04 LTS / Windows WSL Ubuntu 24.04)
-pip install https://github.com/fylype/pyfossil/releases/download/v1.0.0/pyfossil-1.0.0-cp312-cp312-manylinux_2_39_x86_64.whl
+pip install https://github.com/fylype/pyfossil/releases/download/v1.1.0/pyfossil-1.1.0-cp312-cp312-manylinux_2_39_x86_64.whl
 ```
 
 Or install from a locally downloaded wheel:
 ```bash
-pip install pyfossil-1.0.0-*.whl
+pip install pyfossil-1.1.0-*.whl
 ```
 
 > **Tip for Lubuntu / Ubuntu 26.04 Users:**  
@@ -99,7 +100,7 @@ pip install pyfossil-1.0.0-*.whl
 > ```bash
 > sudo apt install python3.12 python3.12-venv
 > python3.12 -m venv ~/fossil_env && source ~/fossil_env/bin/activate
-> pip install pyfossil-1.0.0-cp312-*.whl
+> pip install pyfossil-1.1.0-cp312-*.whl
 > ```
 
 To verify the installation:
@@ -133,21 +134,25 @@ sim.rock_properties.perm_x = 100.0 * 9.86923e-16  # 100 mD in m^2
 sim.rock_properties.perm_y = 100.0 * 9.86923e-16
 
 # 4. Solvers & execution control
+sim.execution_control.variables = {pyfossil.Variable.SW}
 sim.execution_control.darcy_linear_solver = pyfossil.DarcyLinearSolver.CG
 sim.execution_control.darcy_preconditioner = pyfossil.DarcyPreconditioner.BOOMER_AMG
 sim.execution_control.transport_linear_solver = pyfossil.TransportLinearSolver.GMRES
 sim.execution_control.transport_preconditioner = pyfossil.TransportPreconditioner.BLOCK_ILU
 
 # 5. Boundary conditions: Injection on Left, Production on Right
-bcs = sim.initial_and_boundary_conditions
-bcs["Left"].darcy_boundary_type = pyfossil.DarcyBoundaryType.DIRICHLET
-bcs["Left"].darcy_boundary_value = 2.0e7  # 200 bar
-bcs["Right"].darcy_boundary_type = pyfossil.DarcyBoundaryType.DIRICHLET
-bcs["Right"].darcy_boundary_value = 1.0e7  # 100 bar
+bcs = sim.initial_and_boundary_conditions.orthogonal_boundaries
+bcs.left.darcy_boundary_type = pyfossil.DarcyBoundaryType.DIRICHLET
+bcs.left.darcy_boundary_value = 2.0e7  # 200 bar
+bcs.left.trans_boundary_type = pyfossil.TransportBoundaryType.INFLOW_DIRICHLET
+bcs.left.trans_boundary_values[pyfossil.Variable.SW] = 1.0
+bcs.right.darcy_boundary_type = pyfossil.DarcyBoundaryType.DIRICHLET
+bcs.right.darcy_boundary_value = 1.0e7  # 100 bar
+bcs.right.trans_boundary_type = pyfossil.TransportBoundaryType.OUTFLOW
 
 # 6. Run simulation
 sim.time_data.final_time = 3600.0 * 24 * 30  # 30 days
-simulator = pyfossil.FossilSimulator(sim, "./output_quickstart")
+simulator = pyfossil.FossilSimulator(sim, out_dir="./output_quickstart")
 simulator.run()
 ```
 
@@ -182,7 +187,7 @@ pyfossil/
 ## 📊 Plotting & Post-Processing
 
 `pyfossil` includes [`plotter.py`](plotter.py) providing the `FossilPlotter` class for:
-- Well production and pressure history curves (`wells.csv`).
+- Well production, BHP, and pressure-drop history curves (`production.dat`/`.csv`, `bhp.dat`/`.csv`, `pressure_drop.dat`/`.csv`).
 - 1D spatial profiles of saturation ($S_w$), pressure, and foam texture ($n_D$).
 - Clean 2D/3D PyVista spatial field renderings and standalone publication colorbars.
 

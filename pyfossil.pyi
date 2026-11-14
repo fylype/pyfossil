@@ -277,9 +277,6 @@ class TimeIntegrator:
     ERK: Final[Enum_TimeIntegrator] = ...
     """(arg: object, /) -> pyfossil.Enum_TimeIntegrator"""
 
-    IDA: Final[Enum_TimeIntegrator] = ...
-    """(arg: object, /) -> pyfossil.Enum_TimeIntegrator"""
-
 class Enum_NonlinearSolver:
     def __init__(self, arg: Enum_NonlinearSolver, /) -> None: ...
 
@@ -478,9 +475,6 @@ class FoamModel:
     STARS: Final[Enum_FoamModel] = ...
     """(arg: object, /) -> pyfossil.Enum_FoamModel"""
 
-    LAMAP: Final[Enum_FoamModel] = ...
-    """(arg: object, /) -> pyfossil.Enum_FoamModel"""
-
     NONE: Final[Enum_FoamModel] = ...
     """(arg: object, /) -> pyfossil.Enum_FoamModel"""
 
@@ -500,9 +494,6 @@ class DarcyBoundaryType:
     """(arg: object, /) -> pyfossil.Enum_DarcyBoundaryType"""
 
     NEUMANN: Final[Enum_DarcyBoundaryType] = ...
-    """(arg: object, /) -> pyfossil.Enum_DarcyBoundaryType"""
-
-    DIRICHLET_COMPUTED: Final[Enum_DarcyBoundaryType] = ...
     """(arg: object, /) -> pyfossil.Enum_DarcyBoundaryType"""
 
 class Enum_TransportBoundaryType:
@@ -1732,27 +1723,6 @@ class StarsModel:
     @shear_thinning_exponent.setter
     def shear_thinning_exponent(self, arg: float, /) -> None: ...
 
-class LAMAPModel:
-    def __init__(self) -> None: ...
-
-    @property
-    def muapp_vs_fg(self) -> ConstantOrMap_Double_Double: ...
-
-    @muapp_vs_fg.setter
-    def muapp_vs_fg(self, arg: ConstantOrMap_Double_Double, /) -> None: ...
-
-    @property
-    def apparent_viscosity_table(self) -> ConstantOrMap_Double_Double: ...
-
-    @apparent_viscosity_table.setter
-    def apparent_viscosity_table(self, arg: ConstantOrMap_Double_Double, /) -> None: ...
-
-    @property
-    def apparent_viscosity_vs_gas_fraction(self) -> ConstantOrMap_Double_Double: ...
-
-    @apparent_viscosity_vs_gas_fraction.setter
-    def apparent_viscosity_vs_gas_fraction(self, arg: ConstantOrMap_Double_Double, /) -> None: ...
-
 class ZithaModel:
     def __init__(self) -> None: ...
 
@@ -2964,18 +2934,6 @@ class EORMechanisms:
     def ashoori(self, arg: AshooriModel, /) -> None: ...
 
     @property
-    def lamap_model(self) -> LAMAPModel: ...
-
-    @lamap_model.setter
-    def lamap_model(self, arg: LAMAPModel, /) -> None: ...
-
-    @property
-    def lamap(self) -> LAMAPModel: ...
-
-    @lamap.setter
-    def lamap(self, arg: LAMAPModel, /) -> None: ...
-
-    @property
     def stars_model(self) -> StarsModel: ...
 
     @stars_model.setter
@@ -3756,6 +3714,135 @@ class ScalingParameters:
     @property
     def N_c(self) -> float: ...
 
+class ModelFunctions:
+    def krw(self, sw: object) -> object:
+        """
+        Evaluates water relative permeability krw(sw) [-]. Accepts scalar or 1D numpy.ndarray.
+        """
+
+    def perm_rel_w(self, sw: object) -> object:
+        """Alias for krw(sw) [-]."""
+
+    def dkrw_dsw(self, sw: object) -> object:
+        """
+        Evaluates exact derivative d(krw)/d(sw) [-]. Accepts scalar or 1D numpy.ndarray.
+        """
+
+    def dperm_rel_w_dsw(self, sw: object) -> object:
+        """Alias for dkrw_dsw(sw) [-]."""
+
+    def krg(self, sw: object) -> object:
+        """
+        Evaluates gas relative permeability krg(sw) [-]. Accepts scalar or 1D numpy.ndarray.
+        """
+
+    def perm_rel_g(self, sw: object) -> object:
+        """Alias for krg(sw) [-]."""
+
+    def dkrg_dsw(self, sw: object) -> object:
+        """
+        Evaluates exact derivative d(krg)/d(sw) [-]. Accepts scalar or 1D numpy.ndarray.
+        """
+
+    def dperm_rel_g_dsw(self, sw: object) -> object:
+        """Alias for dkrg_dsw(sw) [-]."""
+
+    def mobility_w(self, sw: object) -> object:
+        """
+        Evaluates physical water mobility lambda_w(sw) = krw(sw)/mu_w [1/(Pa.s)]. Accepts scalar or 1D numpy.ndarray.
+        """
+
+    def dmobility_w_dsw(self, sw: object) -> object:
+        """
+        Evaluates physical derivative d(lambda_w)/d(sw) [1/(Pa.s)]. Accepts scalar or 1D numpy.ndarray.
+        """
+
+    def mobility_g(self, sw: object, mu_g_or_f: float = -1.0) -> object:
+        """
+        Evaluates physical gas/foam mobility lambda_g(sw, mu_g_or_f) = krg(sw)/mu [1/(Pa.s)]. Defaults to base gas viscosity if mu_g_or_f < 0.
+        """
+
+    def dmobility_g_dsw(self, sw: object, mu_g_or_f: float = -1.0) -> object:
+        """
+        Evaluates physical derivative d(lambda_g)/d(sw) at constant viscosity [1/(Pa.s)].
+        """
+
+    def fw_no_pc(self, sw: object, mu_g_or_f: float = -1.0) -> object:
+        """
+        Evaluates fractional water flow without capillary/gravity effects fw(sw) = lambda_w / (lambda_w + lambda_g) [-].
+        """
+
+    def dfw_no_pc_dsw(self, sw: object, mu_g_or_f: float = -1.0) -> object:
+        """Evaluates derivative d(fw_no_pc)/d(sw) [-]."""
+
+    def capillary_pressure(self, sw: object, perm: float = -1.0, por: float = -1.0) -> object:
+        """Evaluates physical capillary pressure Pc(sw, perm, por) [Pa]."""
+
+    def pc(self, sw: object, perm: float = -1.0, por: float = -1.0) -> object:
+        """Alias for capillary_pressure(sw, perm, por) [Pa]."""
+
+    def capillary_pressure_derivative(self, sw: object, perm: float = -1.0, por: float = -1.0) -> object:
+        """Evaluates physical derivative dPc/dSw [Pa]."""
+
+    def dpc_dsw(self, sw: object, perm: float = -1.0, por: float = -1.0) -> object:
+        """Alias for capillary_pressure_derivative(sw, perm, por) [Pa]."""
+
+    def gas_density(self, p: object) -> object:
+        """
+        Evaluates physical gas density rho_g(P) [kg/m^3] for pressure P in [Pa].
+        """
+
+    def rho_g(self, p: object) -> object:
+        """Alias for gas_density(p) [kg/m^3]."""
+
+    def gas_density_derivative(self, p: object) -> object:
+        """
+        Evaluates physical derivative d(rho_g)/dP [kg/(m^3.Pa)] for pressure P in [Pa].
+        """
+
+    def drho_g_dp(self, p: object) -> object:
+        """Alias for gas_density_derivative(p) [kg/(m^3.Pa)]."""
+
+    def equilibrium_adsorbed_surfactant(self, cs: object) -> object:
+        """
+        Evaluates equilibrium adsorbed surfactant concentration Ca_eq(Cs) in physical units.
+        """
+
+    def ca_eq(self, cs: object) -> object:
+        """Alias for equilibrium_adsorbed_surfactant(cs)."""
+
+    def surfactant_concentration_from_raw(self, raw_swcs: object, sw: object, por: float = -1.0) -> object:
+        """
+        Inverts conserved surfactant variable raw_swcs = Sw*Cs + ((1-phi)/phi)*Ca_eq(Cs) -> Cs.
+        """
+
+    def cs_from_raw(self, raw_swcs: object, sw: object, por: float = -1.0) -> object:
+        """Alias for surfactant_concentration_from_raw(raw_swcs, sw, por)."""
+
+    def raw_from_surfactant_concentration(self, cs: object, sw: object, por: float = -1.0) -> object:
+        """
+        Evaluates conserved surfactant variable raw_swcs = Sw*Cs + ((1-phi)/phi)*Ca_eq(Cs).
+        """
+
+    def raw_from_cs(self, cs: object, sw: object, por: float = -1.0) -> object:
+        """Alias for raw_from_surfactant_concentration(cs, sw, por)."""
+
+    def kinetic_adsorption_rate(self, cs: object, ca: object, por: float = -1.0) -> object:
+        """Evaluates physical kinetic surfactant adsorption rate [1/s]."""
+
+    def foam_viscosity(self, sw: object, nd: float = 0.0, cs: float = 0.0, u_norm: float = 0.0, perm: float = -1.0, por: float = -1.0) -> object:
+        """Evaluates physical apparent foam/gas viscosity mu_f [Pa.s]."""
+
+    def nd_le(self, sw: object) -> object:
+        """
+        Evaluates local-equilibrium normalized foam bubble density n_D_LE(Sw) [-].
+        """
+
+    def foam_source(self, sw: object, nd: float, cs: float = 0.0, u_norm: float = 0.0, grad_sw_norm: float = 0.0, p: float = 100000.0, perm: float = -1.0, por: float = -1.0) -> object:
+        """
+        Evaluates physical net foam generation/coalescence source term Phi_f [1/s].
+        """
+
 class SimulationData:
     def __init__(self) -> None: ...
 
@@ -3850,6 +3937,15 @@ class SimulationData:
     @property
     def scaling_parameters(self) -> ScalingParameters: ...
 
+    @property
+    def model_functions(self) -> ModelFunctions:
+        """
+        Constitutive physical functions (krw, krg, pc, rho_g, mobilities, foam, adsorption) in SI units.
+        """
+
+    def get_model_functions(self) -> ModelFunctions:
+        """Returns the constitutive physical functions proxy in SI units."""
+
     def validate(self) -> None: ...
 
     def perform_setup(self) -> None:
@@ -3915,6 +4011,25 @@ class FossilSimulator2D:
 
     def get_internal_simulation_data(self) -> SimulationData:
         """Returns the internal dimensionless simulation data used by solvers."""
+
+    @property
+    def model_functions(self) -> ModelFunctions:
+        """
+        Constitutive physical functions (krw, krg, pc, rho_g, mobilities, foam, adsorption) in SI units.
+        """
+
+    def get_model_functions(self) -> ModelFunctions:
+        """Returns the constitutive physical functions proxy in SI units."""
+
+    def request_darcy_solve(self) -> None:
+        """
+        Explicitly requests an immediate Darcy pressure/velocity solve at the current step_callback time.
+        """
+
+    def force_darcy_solve(self) -> None:
+        """
+        Alias for request_darcy_solve(): forces an immediate Darcy solve at the current step_callback time.
+        """
 
     def set_step_callback(self, callback: object) -> None:
         """
@@ -4078,6 +4193,25 @@ class FossilSimulator3D:
 
     def get_internal_simulation_data(self) -> SimulationData:
         """Returns the internal dimensionless simulation data used by solvers."""
+
+    @property
+    def model_functions(self) -> ModelFunctions:
+        """
+        Constitutive physical functions (krw, krg, pc, rho_g, mobilities, foam, adsorption) in SI units.
+        """
+
+    def get_model_functions(self) -> ModelFunctions:
+        """Returns the constitutive physical functions proxy in SI units."""
+
+    def request_darcy_solve(self) -> None:
+        """
+        Explicitly requests an immediate Darcy pressure/velocity solve at the current step_callback time.
+        """
+
+    def force_darcy_solve(self) -> None:
+        """
+        Alias for request_darcy_solve(): forces an immediate Darcy solve at the current step_callback time.
+        """
 
     def set_step_callback(self, callback: object) -> None:
         """

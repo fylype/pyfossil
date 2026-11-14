@@ -1,4 +1,4 @@
-# `pyfossil` Official Documentation (v1.0.0)
+# `pyfossil` Official Documentation (v1.1.0)
 
 Welcome to the documentation for **`pyfossil`**, the high-performance Python interface to **FOSSIL** (**FO**am di**S**placement **S**ImuLator). FOSSIL is a state-of-the-art scientific simulation engine designed for multiphase fluid flow, reactive surfactant transport, and foam displacement in heterogeneous petroleum reservoirs and porous media.
 
@@ -18,7 +18,8 @@ Welcome to the documentation for **`pyfossil`**, the high-performance Python int
    - Declarative and intuitive configuration through the unified `SimulationData` container.
    - **Zero-copy NumPy array interoperability** for direct injection of heterogeneous petrophysical maps, initial state distributions, and PVT tables.
    - Native support for Cartesian structured meshes and 2D/3D unstructured **Gmsh** grids (`.msh`).
-   - Dynamic real-time execution hooks (`set_step_callback`) for intelligent well controllers, physics-informed machine learning, and optimization algorithms.
+   - Dynamic real-time execution hooks (`set_step_callback`) executed prior to Darcy and exports for zero-overhead intelligent well controllers, physics-informed machine learning, and optimization algorithms.
+   - Direct Python evaluation of all C++ constitutive models (`model_functions`) in physical SI units with 1D NumPy vectorization (`krw`, `krg`, `mobility_w`, `mobility_g`, `pc`, `rho_g`, `foam_viscosity`, adsorption isotherms).
 
 ---
 
@@ -53,14 +54,24 @@ sim.rock_properties.porosity = 0.20
 sim.rock_properties.perm_x = 100.0 * 9.86923e-16 # 100 mD in m^2
 sim.rock_properties.perm_y = 100.0 * 9.86923e-16
 
-# 4. Configure solvers
+# 4. Configure solvers & boundary conditions
+sim.execution_control.variables = {pyfossil.Variable.SW}
 sim.execution_control.darcy_linear_solver = pyfossil.DarcyLinearSolver.CG
 sim.execution_control.darcy_preconditioner = pyfossil.DarcyPreconditioner.BOOMER_AMG
 sim.execution_control.transport_linear_solver = pyfossil.TransportLinearSolver.GMRES
 sim.execution_control.transport_preconditioner = pyfossil.TransportPreconditioner.BLOCK_ILU
 
+bcs = sim.initial_and_boundary_conditions.orthogonal_boundaries
+bcs.left.darcy_boundary_type = pyfossil.DarcyBoundaryType.DIRICHLET
+bcs.left.darcy_boundary_value = 2.0e7
+bcs.left.trans_boundary_type = pyfossil.TransportBoundaryType.INFLOW_DIRICHLET
+bcs.left.trans_boundary_values[pyfossil.Variable.SW] = 1.0
+bcs.right.darcy_boundary_type = pyfossil.DarcyBoundaryType.DIRICHLET
+bcs.right.darcy_boundary_value = 1.0e7
+bcs.right.trans_boundary_type = pyfossil.TransportBoundaryType.OUTFLOW
+
 # 5. Initialize and execute the simulation engine
-simulator = pyfossil.FossilSimulator(sim, "./output_quickstart")
+simulator = pyfossil.FossilSimulator(sim, out_dir="./output_quickstart")
 simulator.run()
 ```
 

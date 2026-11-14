@@ -143,10 +143,11 @@ def build_model(mode: InjectionMode = InjectionMode.SAG,
     sim.execution_control.num_threads = 4
     sim.execution_control.num_method = pyfossil.NumericalMethod.KNP
     sim.execution_control.time_integrator = pyfossil.TimeIntegrator.BDF
-    sim.execution_control.darcy_linear_solver = pyfossil.DarcyLinearSolver.CG
-    sim.execution_control.darcy_preconditioner = pyfossil.DarcyPreconditioner.BOOMER_AMG
+    sim.execution_control.nonlinear_solver = pyfossil.NonlinearSolver.NEWTON
     sim.execution_control.transport_linear_solver = pyfossil.TransportLinearSolver.GMRES
     sim.execution_control.transport_preconditioner = pyfossil.TransportPreconditioner.BLOCK_ILU
+    sim.execution_control.darcy_linear_solver = pyfossil.DarcyLinearSolver.CG
+    sim.execution_control.darcy_preconditioner = pyfossil.DarcyPreconditioner.BOOMER_AMG
 
     # Adaptive Darcy time stepping (Paz et al., 2021)
     sim.execution_control.darcy_extrapolation_degree = 0

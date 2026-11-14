@@ -8,7 +8,7 @@
 
 `FossilPlotter` interfaces directly with FOSSIL output directories containing:
 * **Unstructured VTU files (`volume_vars_*.vtu`):** Spatial saturation, pressure, foam texture, and surfactant distributions.
-* **CSV history tables (`wells.csv`, `time_series.csv`):** Dynamic Bottom-Hole Pressures (BHP), cumulative fluid injection/production, and phase rates.
+* **Tabular history files (`production.dat`/`.csv`, `bhp.dat`/`.csv`, `pressure_drop.dat`/`.csv`):** Dynamic Bottom-Hole Pressures (BHP), cumulative fluid injection/production, phase rates, and reservoir pressure drops.
 
 Key features:
 * **Publication-Quality Styling:** Clean white background, crisp axis spines, configurable LaTeX font rendering, and automated legends.
@@ -74,15 +74,15 @@ plotter.plot_spatial_1d(
 
 ### 4.2. Plotting Time-Series History (`plot_history`)
 
-Reads CSV logs produced by wells or global integrators and generates multi-curve time-series plots.
+Reads `.dat` (tab-separated) or `.csv` (comma-separated) logs produced by FOSSIL (`bhp.*`, `production.*`, `pressure_drop.*`) and generates multi-curve time-series plots.
 
 ```python
 plotter.plot_history(
-    filename="wells.csv",
-    col_x="time_days",
-    cols_y=["INJ1_bhp_psi", "P1_bhp_psi"],
-    xlabel="Time [days]",
-    ylabel="Bottom-Hole Pressure [psi]",
+    filename="bhp.csv",
+    col_x="time [s]",
+    cols_y=["INJ1_bhp [Pa]", "P1_bhp [Pa]"],
+    xlabel="Time [s]",
+    ylabel="Bottom-Hole Pressure [Pa]",
     save_path="bhp_history.png",
     labels=["Injector 1", "Producer 1"],
     title="Well Pressure Responses"
