@@ -38,6 +38,9 @@ $$H \boldsymbol{\Lambda} = \mathbf{R}$$
 | **`GAMG`** | PETSc | Native Geometric-Algebraic Multigrid | High performance without external HYPRE dependency. |
 | **`ICC`** | deal.II / PETSc | Incomplete Cholesky Factorization ($IC(0)$) | Structured 2D grids. |
 | **`PARASAILS`** | HYPRE / PETSc | Parallel Sparse Approximate Inverse | Reservoirs where anisotropy degrades AMG coarsening. |
+| **`ILU`** | PETSc | Incomplete LU Factorization | General unstructured or mildly nonsymmetric systems. |
+| **`JACOBI`** | PETSc / deal.II | Diagonal scaling preconditioner | Lightweight preconditioning baseline. |
+| **`SSOR`** | deal.II | Symmetric Successive Over-Relaxation | Structured/symmetric systems without external AMG. |
 | **`NONE`** | - | No preconditioning | Used with direct UMFPACK or MINRES. |
 
 ---
@@ -72,4 +75,6 @@ where $P$ is a sparse coupling matrix:
 - **`BLOCK_ILU` (Default & Recommended):** Inverts local block matrices coupling the conservation variables within each single cell (e.g., $S_w, n_D, C_s$). Negligible memory footprint and excellent convergence acceleration.
 - **`GLOBAL_ILU`:** Couples inter-element advective fluxes across the full mesh; ideal for large CFL numbers.
 - **`BOOMER_AMG`:** Applies algebraic multigrid preconditioning to the transport system.
+- **`PARASAILS`:** Parallel sparse approximate inverse preconditioner for the transport linear system.
+- **`JACOBI`:** Lightweight diagonal Jacobi scaling preconditioner.
 - **`NONE`:** Pure matrix-free Krylov iteration without preconditioning (ideal for small time steps).

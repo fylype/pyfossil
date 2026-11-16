@@ -7,7 +7,7 @@
 ## 1. Overview and Capabilities
 
 `FossilPlotter` interfaces directly with FOSSIL output directories containing:
-* **Unstructured VTU files (`volume_vars_*.vtu`):** Spatial saturation, pressure, foam texture, and surfactant distributions.
+* **Unstructured VTU files (`volume_vars_*.vtu` / `.pvd`):** Spatial saturation, pressure, foam texture, and surfactant distributions. These standard VTK outputs can also be inspected directly in [**ParaView**](https://www.paraview.org/) (ParaView is **optional**).
 * **Tabular history files (`production.dat`/`.csv`, `bhp.dat`/`.csv`, `pressure_drop.dat`/`.csv`):** Dynamic Bottom-Hole Pressures (BHP), cumulative fluid injection/production, phase rates, and reservoir pressure drops.
 
 Key features:
@@ -65,10 +65,8 @@ plotter.plot_spatial_1d(
     time_steps=[10, 50, 100, 200],
     xlabel="Core Length [m]",
     ylabel="Water Saturation [-]",
-    save_path="profiles_Sw.png",
-    axis=0,                 # 0 = X-axis, 1 = Y-axis, 2 = Z-axis
-    y_limits=(0.0, 1.0),
-    title="Water Saturation Advance Along Core"
+    save_as="profiles_Sw.png",
+    ylim=(0.0, 1.0)
 )
 ```
 
@@ -83,9 +81,8 @@ plotter.plot_history(
     cols_y=["INJ1_bhp [Pa]", "P1_bhp [Pa]"],
     xlabel="Time [s]",
     ylabel="Bottom-Hole Pressure [Pa]",
-    save_path="bhp_history.png",
-    labels=["Injector 1", "Producer 1"],
-    title="Well Pressure Responses"
+    save_as="bhp_history.png",
+    labels=["Injector 1", "Producer 1"]
 )
 ```
 
@@ -97,10 +94,10 @@ Renders 2D or 3D scalar fields directly using PyVista off-screen rendering.
 plotter.plot_spatial_mesh(
     target_variable="gas_saturation",
     time_step=150,
-    save_path="gas_plume_3d.png",
+    save_as="gas_plume_3d.png",
     cmap="jet_r",
-    clim=[0.0, 0.8],
-    camera_position="iso",      # 'xy', 'xz', 'yz', or 'iso'
+    limits=(0.0, 0.8),
+    cpos="iso",
     show_edges=False
 )
 ```
@@ -113,10 +110,9 @@ Creates a standalone colorbar graphic for external report formatting.
 plotter.plot_isolated_colorbar(
     label_name="Dimensionless Foam Texture $n_D$ [-]",
     cmap="viridis",
-    vmin=0.0,
-    vmax=1.0,
+    limits=(0.0, 1.0),
     orientation="horizontal",
-    save_path="colorbar_foam_texture.png"
+    save_as="colorbar_foam_texture.png"
 )
 ```
 
@@ -138,7 +134,7 @@ def main():
         time_steps=[0, 25, 50, 100],
         xlabel="X Position [m]",
         ylabel="Water Saturation [-]",
-        save_path="water_saturation_evolution.png"
+        save_as="water_saturation_evolution.png"
     )
 
     # 2. Render 2D map at final time step
@@ -147,7 +143,7 @@ def main():
     plotter.plot_spatial_mesh(
         target_variable="pressure",
         time_step=last_step,
-        save_path="pressure_field_final.png",
+        save_as="pressure_field_final.png",
         cmap="turbo"
     )
 

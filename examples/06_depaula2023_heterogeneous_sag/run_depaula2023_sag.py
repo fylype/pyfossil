@@ -53,6 +53,7 @@ class InjectionMode(Enum):
 
 def build_model(mode: InjectionMode = InjectionMode.SAG,
                 slug_duration: float = 4000.0,
+                coinjection_fraction: float = 0.25,
                 enable_foam: bool = True) -> pyfossil.SimulationData:
     """
     Constructs the simulation model for SPE 10 Layer 36.
@@ -173,8 +174,8 @@ def build_model(mode: InjectionMode = InjectionMode.SAG,
     # DEMONSTRATION OF ConstantOrMap:
     if mode == InjectionMode.COINJECTION:
         # Continuous injection of water and surfactant
-        bcs["Left"].trans_boundary_values[pyfossil.Variable.SW] = slug_duration
-        bcs["Left"].trans_boundary_values[pyfossil.Variable.CS] = slug_duration
+        bcs["Left"].trans_boundary_values[pyfossil.Variable.SW] = coinjection_fraction
+        bcs["Left"].trans_boundary_values[pyfossil.Variable.CS] = coinjection_fraction
     elif mode == InjectionMode.SAG:
         # SAG Cycle: Begins with water + surfactant (Sw=1.0, Cs=1.0) until t = slug_duration,
         # then switches to gas injection (Sw=0.0, Cs=0.0):

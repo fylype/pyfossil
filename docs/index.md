@@ -29,7 +29,7 @@ Welcome to the documentation for **`pyfossil`**, the high-performance Python int
 - [**Python API Reference**](python_api_reference.md): Detailed documentation of all configuration modules, data classes, enums, properties, and simulator methods.
 - [**Solvers & Numerical Methods**](solvers_and_numerics.md): Theoretical and practical guide to selecting Darcy linear solvers, algebraic multigrid preconditioners, and JFNK transport schemes.
 - [**Tutorials & Benchmarks**](tutorials_guide.md): Comprehensive walkthroughs of the 7 research benchmarks located in the `examples/` directory.
-- [**Visualization Guide (`plotter.py`)**](plotter_guide.md): Automated post-processing, 1D spatial profile extraction, time-series history plots, and 2D/3D PyVista rendering.
+- [**Visualization Guide (`plotter.py`)**](plotter_guide.md): Automated post-processing, 1D spatial profile extraction, time-series history plots, and 2D/3D PyVista rendering (note: FOSSIL also writes standard VTK `.vtu`/`.pvd` files if you prefer opening results in **ParaView**, which is optional).
 
 ---
 

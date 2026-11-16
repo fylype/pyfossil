@@ -45,6 +45,7 @@ Used when `mesh_type = MeshType.UNSTRUCTURED_MESH`.
 - **`gas_compressibility` (`bool`):** Enables compressible gas regime (alias for `gas_comp_prop.compressibility`).
 - **`gas_state_equation` (`pyfossil.GasStateEquationModel`):**
   - `GasStateEquationModel.IDEAL_GAS`: Ideal gas law.
+  - `GasStateEquationModel.IDEAL_GAS_SIMPLIFIED`: Simplified isothermal ideal gas law ($c_g = \mathrm{const}$).
   - `GasStateEquationModel.EXPONENTIAL`: Exponential compressibility equation of state.
   - `GasStateEquationModel.LINEAR`: Linear compressibility equation of state.
   - `GasStateEquationModel.DENSITY_TABLE` (or `TABLE`): Discrete tabular PVT relationship of Pressure vs. Density.
@@ -122,18 +123,17 @@ The foam physics subsection can be accessed either as `sim.eor_mechanisms`, `sim
   - `hirasaki_velocity_exponent` (alias `alpha`): Apparent shear-thinning exponent.
   - `constant_trapping` (alias `const_trapping`): Assumes constant trapped bubble fraction.
 - **STARS Model (`sim.foam.stars` or `sim.eor_mechanisms.stars_model`):**
-  - `max_mobility_reduction` (alias `fmmob`): Reference mobility reduction multiplier.
-  - `critical_water_saturation` (aliases `dry_out_saturation`, `fmsw`): Wetting phase collapse saturation.
-  - `transition_sharpness` (alias `sfbet`): Transition steepness parameter $\beta$.
-  - `reference_surfactant` (alias `fmsurf`): Critical surfactant threshold [wt%].
-  - `surfactant_exponent` (alias `esurf`): Surfactant exponent.
-  - `reference_capillary_number` (alias `fmcap`): Critical capillary number.
-  - `capillary_number_exponent` (alias `ecap`): Capillary number exponent.
-  - `shear_thinning_exponent` (alias `epcap`): Shear-thinning velocity exponent.
+  - `max_mobility_reduction` (aliases `fmmob`, `maximum_mobility_reduction`, `max_mrf`, `mrf`): Reference mobility reduction multiplier.
+  - `critical_water_saturation` (aliases `sfdry`, `dry_out_saturation`, `limiting_water_saturation`): Wetting phase collapse saturation.
+  - `transition_sharpness` (aliases `sfbet`, `sharpness_transition`, `regime_transition_beta`): Transition steepness parameter $\beta$.
+  - `reference_surfactant` (aliases `fmsurf`, `critical_surfactant_concentration`): Critical surfactant threshold [wt%].
+  - `surfactant_exponent` (alias `epsurf`): Surfactant exponent.
+  - `reference_capillary_number` (aliases `fmcap`, `critical_capillary_number`): Critical capillary number.
+  - `capillary_number_exponent` (aliases `epcap`, `shear_thinning_exponent`): Capillary-number / shear-thinning exponent.
 - **Zitha Model (`sim.foam.zitha` or `sim.eor_mechanisms.zitha_model`):**
-  - `generation_rate` (`C_g`), `destruction_rate` (`C_c`).
-  - `max_water_rel_perm` (`krw0`), `max_foamed_gas_rel_perm` (`krgf0`).
-  - `effective_pore_radius` (`r_eff`), `contact_angle` (`theta`).
+  - `generation_rate` (aliases `K_1`, `k1`, `generation_parameter`), `destruction_rate` (aliases `K_2`, `k2`, `destruction_parameter`).
+  - `max_water_rel_perm` (`k0_rw`), `max_foamed_gas_rel_perm` (`k0_rf`).
+  - `effective_pore_radius` (`pore_radius`), `contact_angle` (`theta_angle`).
 - **Surfactant Properties & Adsorption (`sim.eor_mechanisms.surfactant_properties` or `sim.foam.surfactant`):**
   - `adsorption_behavior` (`pyfossil.AdsorptionBehavior`): `NONE`, `EQUILIBRIUM`, `KINETIC`, `MIXED`.
   - `d_s` (`float`): Surfactant dispersion coefficient [m²/s].
@@ -152,7 +152,7 @@ inj.well_type = pf.WellType.INJECTOR
 inj.well_control = pf.WellControl.FLOW_RATE   # or pf.WellConstraintType.FLOW_RATE
 inj.well_value = 1.0e-3                       # direct float or schedule dict
 inj.well_radius = 0.1                         # wellbore radius [m]
-inj.skin_factor = 0.0                         # mechanical skin factor s (or inj.skin = 0.0)
+inj.skin_factor = 0.0                         # mechanical skin factor s
 inj.wfrac = 1.0                               # well angular fraction (0.25 for quarter-well)
 inj.use_hydrostatic_head = True               # gravitational head correction (alias: include_hydrostatic_head)
 inj.use_cell_mobility = True                  # use cell local mobility vs endpoint mobility
@@ -185,7 +185,7 @@ if "INJ1" in sim.wells:
 - **Boundary Properties:**
   - `darcy_boundary_type`: `DIRICHLET` (prescribed pressure) or `NEUMANN` (prescribed Darcy flux [m/s]).
   - `darcy_boundary_value`: Scalar value or time schedule `{t0: v0, t1: v1}`.
-  - `trans_boundary_type`: `DIRICHLET`, `INFLOW_DIRICHLET`, `INFLOW_NEUMANN_FW`, `OUTFLOW`, `NO_FLOW`.
+  - `trans_boundary_type`: `INFLOW_DIRICHLET`, `INFLOW_NEUMANN`, `INFLOW_NEUMANN_FW`, `OUTFLOW`, `NO_FLOW`.
   - `trans_boundary_values[pyfossil.Variable.*]`: Prescribed injected volume fraction or concentration.
 
 ---
@@ -201,21 +201,22 @@ if "INJ1" in sim.wells:
 - **`darcy_linear_solver` (`pyfossil.DarcyLinearSolver`):**
   - `CG`: Conjugate Gradient (ideal for symmetric positive-definite condensed systems).
   - `MINRES`: Minimal Residual (optimal for pure-Neumann problems with nullspace closure).
-  - `GMRES`, `BiCGSTAB`: General Krylov solvers for nonsymmetric matrices.
+  - `GMRES`, `FGMRES`, `BiCGSTAB`: General Krylov solvers for nonsymmetric matrices.
   - `UMFPACK`: Direct sparse LU factorization (exact and robust for 1D/2D).
 - **`darcy_preconditioner` (`pyfossil.DarcyPreconditioner`):**
   - `BOOMER_AMG`: HYPRE BoomerAMG algebraic multigrid (peak performance on large 3D meshes).
   - `GAMG`: PETSc native Geometric-Algebraic Multigrid.
-  - `ICC`: Incomplete Cholesky Factorization.
+  - `ICC`, `ILU`, `JACOBI`, `SSOR`: Incomplete factorization and relaxation/diagonal preconditioners.
   - `PARASAILS`: Parallel Sparse Approximate Inverse.
   - `NONE`: Unpreconditioned iterative solver.
 - **`transport_linear_solver` (`pyfossil.TransportLinearSolver`):**
-  - `GMRES`, `BICGSTAB`, `TFQMR`: Native SUNDIALS Krylov solvers tightly coupled to JFNK.
-  - `GMRES_PETSC`, `BCGSL_PETSC`, `BICGSTAB_PETSC`: PETSc KSP solvers coupled to JFNK.
+  - `GMRES`, `FGMRES`, `BICGSTAB`, `BCGSL`, `TFQMR`: Native SUNDIALS Krylov solvers tightly coupled to JFNK.
+  - `GMRES_PETSC`, `FGMRES_PETSC`, `BCGSL_PETSC`, `BICGSTAB_PETSC`, `TFQMR_PETSC`: PETSc KSP solvers coupled to JFNK.
 - **`transport_preconditioner` (`pyfossil.TransportPreconditioner`):**
   - `BLOCK_ILU`: Block-Jacobi incomplete LU per cell (default, excellent efficiency).
   - `GLOBAL_ILU`: Global coupled ILU across the full mesh.
   - `BOOMER_AMG`: Algebraic multigrid for transport systems.
+  - `PARASAILS`, `JACOBI`: Parallel sparse approximate inverse and Jacobi scaling.
   - `NONE`: Pure matrix-free JFNK without preconditioning.
 - **`darcy_time_step_strategy` (`pyfossil.DarcyTimeStepStrategy`):**
   - `NONE`: Fixed constant Darcy macro time step.

@@ -69,24 +69,31 @@ Built on top of leading numerical libraries (**deal.II**, **SUNDIALS**, **PETSc*
 `pyfossil` is distributed as a **standalone ManyLinux wheel** with all scientific dependencies (**deal.II, PETSc, HYPRE, SUNDIALS, OpenBLAS, TBB**) pre-compiled and bundled inside the package. **No compilation or external library installation is required.**
 
 ### Prerequisites
-- Operating System: **Linux x86_64** (Ubuntu 20.04+, Debian 11+, CentOS/RHEL 8+, Fedora 34+, Arch Linux, etc.)
-- Python: **3.12, 3.13, or 3.14**
-- Basic libraries:
+- **Operating System:** Linux `x86_64` with `glibc >= 2.39` (Ubuntu 24.04 LTS+, Debian 13+, Fedora 40+, Arch Linux, etc., matching `manylinux_2_39_x86_64`).
+- **Python:** **3.12, 3.13, or 3.14**
+- **System Runtime Libraries (Ubuntu / Debian):**  
+  Scientific libraries (**deal.II, PETSc, HYPRE, SUNDIALS 7.9, SuiteSparse, OpenBLAS**) are already bundled inside `pyfossil.libs/` (no `-dev` packages needed), but the wheel still requires the following system runtime libraries:
   ```bash
-  pip install numpy matplotlib
+  sudo apt-get update && sudo apt-get install -y openmpi-bin libx11-6 libgomp1 zlib1g
   ```
+  *(On Ubuntu 24.04, `openmpi-bin` can be replaced by `libopenmpi3t64` if `mpirun` is not needed.)*
+- **Python Packages:**
+  ```bash
+  pip install numpy matplotlib pyvista pandas
+  ```
+  *(Note: `numpy` and `matplotlib` cover core scripting and 1D plots; `pyvista` and `pandas` are required when using `FossilPlotter` in `plotter.py`.)*
 
 ### Install from GitHub Releases
 Download and install the pre-compiled standalone wheel matching your active Python version:
 
 ```bash
-# Python 3.14 (Ubuntu 26.04 / Lubuntu 26.04 Rolling)
+# Python 3.14
 pip install https://github.com/fylype/pyfossil/releases/download/v1.1.0/pyfossil-1.1.0-cp314-cp314-manylinux_2_39_x86_64.whl
 
 # Python 3.13
 pip install https://github.com/fylype/pyfossil/releases/download/v1.1.0/pyfossil-1.1.0-cp313-cp313-manylinux_2_39_x86_64.whl
 
-# Python 3.12 (Ubuntu 24.04 LTS / Windows WSL Ubuntu 24.04)
+# Python 3.12
 pip install https://github.com/fylype/pyfossil/releases/download/v1.1.0/pyfossil-1.1.0-cp312-cp312-manylinux_2_39_x86_64.whl
 ```
 
@@ -94,14 +101,6 @@ Or install from a locally downloaded wheel:
 ```bash
 pip install pyfossil-1.1.0-*.whl
 ```
-
-> **Tip for Lubuntu / Ubuntu 26.04 Users:**  
-> Since Lubuntu defaults to Python 3.14, use the `cp314` wheel above. Alternatively, if you wish to run in a Python 3.12 environment on Lubuntu, create an isolated virtual environment:
-> ```bash
-> sudo apt install python3.12 python3.12-venv
-> python3.12 -m venv ~/fossil_env && source ~/fossil_env/bin/activate
-> pip install pyfossil-1.1.0-cp312-*.whl
-> ```
 
 To verify the installation:
 ```python
@@ -190,6 +189,8 @@ pyfossil/
 - Well production, BHP, and pressure-drop history curves (`production.dat`/`.csv`, `bhp.dat`/`.csv`, `pressure_drop.dat`/`.csv`).
 - 1D spatial profiles of saturation ($S_w$), pressure, and foam texture ($n_D$).
 - Clean 2D/3D PyVista spatial field renderings and standalone publication colorbars.
+
+> **Note on VTK & ParaView:** FOSSIL writes standard VTK unstructured snapshots (`output/volume_vars_*.vtu` / `.pvd`), which can be visualized directly in [**ParaView**](https://www.paraview.org/) as an **optional** external tool, or rendered directly from Python via `FossilPlotter`.
 
 Example:
 ```python
