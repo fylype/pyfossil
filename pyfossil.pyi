@@ -10,7 +10,7 @@ from collections.abc import (
 from typing import Final, TypeAlias, overload
 
 
-__version_info__: tuple = (1, 0, 0, '')
+__version_info__: tuple = (1, 1, 0, '')
 
 class VariableMap:
     @overload
@@ -748,30 +748,6 @@ class SurfactantBehavior:
 
     COMPUTED: Final[Enum_SurfactantBehavior] = ...
     """(arg: object, /) -> pyfossil.Enum_SurfactantBehavior"""
-
-class Enum_NonConvexFluxStrategy:
-    def __init__(self, arg: Enum_NonConvexFluxStrategy, /) -> None: ...
-
-    def __str__(self) -> str: ...
-
-    def __repr__(self) -> str: ...
-
-    def __eq__(self, arg: Enum_NonConvexFluxStrategy, /) -> bool: ...
-
-    def __hash__(self) -> int: ...
-
-class NonConvexFluxStrategy:
-    NONE: Final[Enum_NonConvexFluxStrategy] = ...
-    """(arg: object, /) -> pyfossil.Enum_NonConvexFluxStrategy"""
-
-    BRUTE_FORCE: Final[Enum_NonConvexFluxStrategy] = ...
-    """(arg: object, /) -> pyfossil.Enum_NonConvexFluxStrategy"""
-
-    NLOPT_OPTIMIZATION: Final[Enum_NonConvexFluxStrategy] = ...
-    """(arg: object, /) -> pyfossil.Enum_NonConvexFluxStrategy"""
-
-    STEEPEST_DESCENT: Final[Enum_NonConvexFluxStrategy] = ...
-    """(arg: object, /) -> pyfossil.Enum_NonConvexFluxStrategy"""
 
 class Enum_OutputMode:
     def __init__(self, arg: Enum_OutputMode, /) -> None: ...
@@ -3553,12 +3529,6 @@ class ExecutionControl:
     def verbose_mode(self, arg: bool, /) -> None: ...
 
     @property
-    def non_convex_flux_strategy(self) -> Enum_NonConvexFluxStrategy: ...
-
-    @non_convex_flux_strategy.setter
-    def non_convex_flux_strategy(self, arg: Enum_NonConvexFluxStrategy, /) -> None: ...
-
-    @property
     def darcy_error_tolerance(self) -> float: ...
 
     @darcy_error_tolerance.setter
@@ -3958,14 +3928,16 @@ class SimulationData:
 
     def load_prm(self, filename: str, skip_undefined: bool = True) -> None:
         """
-        Carrega configurações físicas alocando poços e bordas dinâmicas preventivamente.
+        Loads physical and numerical settings from a .prm or .xml file, pre-allocating dynamic wells and boundaries.
         """
 
     def read_prm(self, filename: str, skip_undefined: bool = True) -> None:
         """Alias for load_prm."""
 
     def save_prm(self, filename: str) -> None:
-        """Guarda a configuração atual da memória num ficheiro .prm legível."""
+        """
+        Saves the current SimulationData configuration to a human-readable .prm file.
+        """
 
     def set_custom_rel_perm_functions(self, krw_func: Callable[[float, SimulationData], float], krg_func: Callable[[float, SimulationData], float], resolution: int = 100) -> None:
         """
@@ -4033,7 +4005,7 @@ class FossilSimulator2D:
 
     def set_step_callback(self, callback: object) -> None:
         """
-        Registers a Python function to be executed at the end of each time step.
+        Registers a Python callback invoked prior to each Darcy solve and export step (including t_initial).
         """
 
     def __repr__(self) -> str: ...
@@ -4215,7 +4187,7 @@ class FossilSimulator3D:
 
     def set_step_callback(self, callback: object) -> None:
         """
-        Registers a Python function to be executed at the end of each time step.
+        Registers a Python callback invoked prior to each Darcy solve and export step (including t_initial).
         """
 
     def __repr__(self) -> str: ...

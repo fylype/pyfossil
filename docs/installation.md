@@ -2,7 +2,7 @@
 
 **`pyfossil`** is distributed as a pre-compiled, self-contained **ManyLinux Standalone Wheel** (`.whl`).
 
-All high-performance scientific libraries (**deal.II, PETSc, HYPRE, SUNDIALS, NLopt, SuiteSparse UMFPACK, OpenBLAS, and TBB**) are **bundled and linked internally** within the package. **No C++ compilation, CMake configuration, or manual library installations are required.**
+All high-performance scientific libraries (**deal.II, PETSc, HYPRE, SUNDIALS, SuiteSparse UMFPACK, OpenBLAS, and TBB**) are **bundled and linked internally** within the package. **No C++ compilation, CMake configuration, or manual library installations are required.**
 
 ---
 

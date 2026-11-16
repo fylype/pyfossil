@@ -226,8 +226,6 @@ if "INJ1" in sim.wells:
   - `KPP`: Central-Upwind scheme of Kurganov, Petrova & Popova (2007) for non-convex fractional flows.
   - `KT`: Central-Upwind scheme of Kurganov & Tadmor (2000).
   - `UPWIND`: First-order upwind flux scheme.
-- **`non_convex_flux_strategy` (`pyfossil.NonConvexFluxStrategy`):** Extrema search strategy for `KPP`:
-  - `NONE`, `BRUTE_FORCE`, `STEEPEST_DESCENT`, `NLOPT_OPTIMIZATION`.
 - **`time_integrator` (`pyfossil.TimeIntegrator`):**
   - `BDF`: SUNDIALS CVODE variable-order implicit BDF integrator.
   - `ERK`: SUNDIALS ARKODE explicit Runge-Kutta (`ERKStep`) integrator.

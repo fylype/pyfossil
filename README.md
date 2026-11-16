@@ -32,7 +32,7 @@ Includes:
 
 **`pyfossil`** is the high-performance Python interface to **FOSSIL** (**FO**am di**S**placement **S**ImuLator), an advanced scientific simulator designed for high-resolution multiphase flow, surfactant transport, and foam displacement in heterogeneous reservoir formations.
 
-Built on top of leading numerical libraries (**deal.II**, **SUNDIALS**, **PETSc**, **HYPRE**, and **NLopt**), `pyfossil` combines:
+Built on top of leading numerical libraries (**deal.II**, **SUNDIALS**, **PETSc**, and **HYPRE**), `pyfossil` combines:
 - **C++17 High Performance**: Hybridized Mixed Finite Elements (H-MFE) and implicit multi-step time integration with OpenMP parallelization.
 - **Python Usability**: Simple, declarative, scriptable API for setting up complex geometries, well trajectories, and operational schedules without compiling C++ code.
 
@@ -66,7 +66,7 @@ Built on top of leading numerical libraries (**deal.II**, **SUNDIALS**, **PETSc*
 
 ## 📦 Installation
 
-`pyfossil` is distributed as a **standalone ManyLinux wheel** with all scientific dependencies (**deal.II, PETSc, HYPRE, SUNDIALS, NLopt, OpenBLAS, TBB**) pre-compiled and bundled inside the package. **No compilation or external library installation is required.**
+`pyfossil` is distributed as a **standalone ManyLinux wheel** with all scientific dependencies (**deal.II, PETSc, HYPRE, SUNDIALS, OpenBLAS, TBB**) pre-compiled and bundled inside the package. **No compilation or external library installation is required.**
 
 ### Prerequisites
 - Operating System: **Linux x86_64** (Ubuntu 20.04+, Debian 11+, CentOS/RHEL 8+, Fedora 34+, Arch Linux, etc.)
